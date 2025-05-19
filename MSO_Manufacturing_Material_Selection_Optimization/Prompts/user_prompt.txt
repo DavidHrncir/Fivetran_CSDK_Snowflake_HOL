@@ -1,0 +1,3 @@
+- Provide a custom connector for Manufacturing for the mso_data endpoint. 1 table called mso_records - all columns. 
+- Make sure you copy the configuration.json file exactly - do not add any other variables to it.
+- Here is the API spec: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/mso_api_spec

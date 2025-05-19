@@ -1,0 +1,3 @@
+- Provide a custom connector for Financial Services for the fpr_data endpoint. 1 table called fpr_records - all columns. 
+- Make sure you copy the configuration.json file exactly - do not add any other variables to it.
+- Here is the API spec: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/fpr_api_spec

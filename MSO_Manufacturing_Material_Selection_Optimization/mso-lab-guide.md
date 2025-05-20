@@ -18,9 +18,8 @@ The Manufacturing MSO custom connector should fetch material optimization record
   - Tab 2: Anthropic Workbench: AI Code Generation Assistant (Claude)
   - Tab 3: Fivetran: Automated Data Movement Platform
   - Tab 4: Snowflake: Data and AI Platform including Cortex (AI functions) and Streamlit (data apps)
-  - Tab 5: Raw API output sample
-  - Tab 6: Fivetran Connector SDK Examples
-  - Tab 7: Fivetran Connector SDK Docs
+  - Tab 5: Fivetran Connector SDK Examples
+  - Tab 6: Fivetran Connector SDK Docs
 
 ## Mac Keyboard Shortcuts Reference
 - **Command+A**: Select all

@@ -28,8 +28,8 @@ fi
 TABLE_NAME=$(grep '"table"' "$CONNECTOR_FILE" | sed -E 's/.*"table": *"([^"]+)".*/\1/' | head -n 1)
 
 if [ -z "$TABLE_NAME" ]; then
-    echo -e "${YELLOW}Warning: Could not extract table name from connector.py. Using fallback 'fpr_records'.${NC}"
-    TABLE_NAME="fpr_records"
+    echo -e "${YELLOW}Warning: Could not extract table name from connector.py. Using fallback 'qbr_records'.${NC}"
+    TABLE_NAME="qbr_records"
 else
     echo -e "${GREEN}✓ Detected table name: $TABLE_NAME${NC}"
 fi
@@ -72,19 +72,19 @@ echo
 WAREHOUSE_DB="files/warehouse.db"
 if [ -f "$WAREHOUSE_DB" ]; then
     if command -v duckdb >/dev/null 2>&1; then
-        echo -e "${CYAN}Running query:${NC} SELECT * FROM tester.${TABLE_NAME} LIMIT 5;"
+        echo -e "${CYAN}Running query:${NC} SELECT * FROM tester.${TABLE_NAME} ORDER BY record_id LIMIT 5;"
         echo
-        duckdb "$WAREHOUSE_DB" "SELECT * FROM tester.${TABLE_NAME} LIMIT 5;"
+        duckdb "$WAREHOUSE_DB" "SELECT * FROM tester.${TABLE_NAME} ORDER BY record_id LIMIT 5;"
     else
         echo -e "${YELLOW}DuckDB command-line tool not found. Install it or run this manually:${NC}"
-        echo "duckdb \"$WAREHOUSE_DB\" \"SELECT * FROM tester.${TABLE_NAME} LIMIT 5;\""
+        echo "duckdb \"$WAREHOUSE_DB\" \"SELECT * FROM tester.${TABLE_NAME} ORDER BY record_id LIMIT 5;\""
     fi
 else
     echo -e "${YELLOW}warehouse.db not found. Looking for alternatives...${NC}"
     FOUND_DB=$(find . -name "warehouse.db" -type f | head -n 1)
     if [ -n "$FOUND_DB" ]; then
         echo "Found at: $FOUND_DB"
-        echo "duckdb \"$FOUND_DB\" \"SELECT * FROM tester.${TABLE_NAME} LIMIT 5;\""
+        echo "duckdb \"$FOUND_DB\" \"SELECT * FROM tester.${TABLE_NAME} ORDER BY record_id LIMIT 5;\""
     else
         echo "No warehouse.db file found."
     fi

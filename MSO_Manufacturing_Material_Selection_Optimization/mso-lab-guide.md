@@ -12,13 +12,15 @@ The Manufacturing MSO custom connector should fetch material optimization record
 - [Step 3: Create a Streamlit in Snowflake Gen AI Data App (5 minutes)](#step-3-create-a-streamlit-in-snowflake-gen-ai-data-app-5-minutes)
 
 ## Lab Environment
-- MacBook Pro laptop with Chrome browser, VS Code, and the Fivetran Connector SDK
-- 4 Chrome tabs are pre-configured (leave them open throughoug the lab):
+- MacBook Pro laptop with Chrome browser, VS Code, DBeaver and the Fivetran Connector SDK
+- 4 Chrome tabs are pre-configured (leave them open throughout the lab):
   - Tab 1: GitHub Lab Repo: Lab Guide
   - Tab 2: Anthropic Workbench: AI Code Generation Assistant (Claude)
   - Tab 3: Fivetran: Automated Data Movement Platform
   - Tab 4: Snowflake: Data and AI Platform including Cortex (AI functions) and Streamlit (data apps)
   - Tab 5: Raw API output sample
+  - Tab 6: Fivetran Connector SDK Examples
+  - Tab 7: Fivetran Connector SDK Docs
 
 ## Mac Keyboard Shortcuts Reference
 - **Command+A**: Select all
@@ -46,45 +48,59 @@ The Manufacturing MSO custom connector should fetch material optimization record
 
 3. Click the black **Run** button in the upper right
 4. After Claude generates the connector.py code, you will see a response similar to the example connector, but updated for the manufacturing material optimization dataset.
+5. Click [mso_data](https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/mso_data) if you'd like to see the dataset.
 
 ### 1.2 Debug and Deploy the Custom Connector in VS Code
 1. When you see the connector.py code generated in the Anthropic Workbench, click the **Copy** button in the upper right of the code connector.py code block
 2. Go to **VS Code** with Command + Tab or open from the dock
-3. Click on the **mso** folder and then click on the `connector.py` file in that folder
+3. Click on the click on the `connector.py` file in your project
 4. Press Command+V to paste the connector code into the `connector.py` file
-4. Save the updated `connector.py` by pressing Command+S
-5. In VS Code's terminal (bottom right), run the following `debug and reset`command to test and debug the new connector code (copy the command using the icon in the right corner):
+5. Save the updated `connector.py` by pressing Command+S
+6. To test your code locally with configuration values specified in `configuration.json`, you can run the default Fivetran Connector SDK debug command:  
+   `fivetran debug --configuration configuration.json`  
+   This command provides out-of-the-box debugging without any additional scripting. 
+7. We have also created a helper script to debug and validate your connector with enhanced logging, state clearing and data validation. Run the following command from the VS Code terminal (bottom right). You can copy the `debug_and_validate` command using the icon in the right corner):
 
 ```
-./debug_and_reset.sh
+./debug_and_validate.sh
 ```
 
-7. When prompted with "Do you want to continue? (Y/n):", type `Y` and press Enter.
-8. You'll see output displaying the results of the debug script including:
+8. When prompted with "Do you want to continue? (Y/n):", type `Y` and press Enter.
 
-    - Resets the connector state by deleting the existing warehouse.db file and any saved sync checkpoints to start with a clean slate.
+    - You'll see output displaying the results of the debug script including:
 
-    - Runs the fivetran debug command using your configuration file to test the connector in real time.
+        - Resets the connector state by deleting the existing warehouse.db file and any saved sync checkpoints to start with a clean slate.
 
-    - Triggers schema() and update() method calls, initiating data fetches with pagination and checkpoint saving for incremental sync.
+        - Runs the fivetran debug command using your configuration file to test the connector in real time.
 
-    - Verifies data loading and schema creation by simulating a full sync (in this case, upserting 750 records into mso_records).
+        - Triggers schema() and update() method calls, initiating data fetches with pagination and checkpoint saving for incremental sync.
 
-    - Queries and displays sample records from the resulting DuckDB table to confirm the connector outputs expected data.
+        - Verifies data loading and schema creation by simulating a full sync (in this case, upserting 750 records into mso_records).
 
-9. Now deploy the connector by running the `deploy` command in the VS Code terminal (copy the command using the icon in the right corner):
+        - Queries and displays sample records from the resulting DuckDB table to confirm the connector outputs expected data.
+
+9. Fivetran provides a built-in command to deploy your connector directly using the SDK:  
+   `fivetran deploy --api-key <BASE64_API_KEY> --destination <DESTINATION_NAME> --connection <CONNECTION_NAME>`  
+   This command deploys your code to Fivetran and creates or updates the connection. If the connection already exists, it prompts you before overwriting.  
+   You can also provide additional optional parameters:  
+   - `--configuration` to pass configuration values  
+   - `--force` to bypass confirmation prompts  
+   - `--python-version` to specify Python runtime  
+   - `--hybrid-deployment-agent-id` for non-default hybrid agent selection  
+
+10. To simplify the lab experience, we’ve created a helper script that wraps the deploy logic. Run the following command in the VS Code terminal(copy the command using the icon in the right corner):
 
 ```
 ./deploy.sh
 ```
 
-10. Click enter twice to accept the default values for the Fivetran Account Name and the Fivetran Destination. When prompted for the **connection name**, type in:
+11. Click enter twice to accept the default values for the Fivetran Account Name and the Fivetran Destination. When prompted for the **connection name**, type in:
 
 ```
 manufacturing-mso-connector
 ```
 
-11. Press Enter to deploy your new custom connector to Fivetran.
+12. Press Enter to deploy your new custom connector to Fivetran.
 
 ## Step 2: Start Data Sync in Fivetran (3 minutes)
 
@@ -864,7 +880,8 @@ Consider how you might adapt this solution for your own use:
 - Customizing the Streamlit app for specific manufacturing processes
 
 ## Resources
-- Fivetran Connector SDK Documentation: [https://fivetran.com/docs/connectors/connector-sdk](https://fivetran.com/docs/connectors/connector-sdk)
-- API Connector Reference: [https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/mso_api_spec](https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/mso_api_spec)
+- Fivetran Connector SDK Documentation: [https://fivetran.com/docs/connectors/connector-sdk](https://fivetran.com/docs/connectors/connector-sdk)  
+- Fivetran Connector SDK Examples: [https://fivetran.com/docs/connector-sdk/examples](https://fivetran.com/docs/connector-sdk/examples)
+- API Connector Reference: [https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/icp_api_spec](https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/icp_api_spec)
 - Snowflake Cortex Documentation: [https://docs.snowflake.com/en/user-guide/snowflake-cortex/llm-functions](https://docs.snowflake.com/en/user-guide/snowflake-cortex/llm-functions)
 - Snowflake Streamlit Documentation: [https://docs.snowflake.com/en/developer-guide/streamlit/about-streamlit](https://docs.snowflake.com/en/developer-guide/streamlit/about-streamlit)

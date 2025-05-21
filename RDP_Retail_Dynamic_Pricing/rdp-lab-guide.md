@@ -13,12 +13,12 @@ The Retail Dynamic Pricing RDP custom connector should fetch pricing, inventory,
 
 ## Lab Environment
 - MacBook Pro laptop with Chrome browser, VS Code, DBeaver and the Fivetran Connector SDK
-- 4 Chrome tabs are pre-configured (leave them open throughout the lab):
+- 6 Chrome tabs are pre-configured (leave them open throughout the lab):
   - Tab 1: GitHub Lab Repo: Lab Guide
   - Tab 2: Anthropic Workbench: AI Code Generation Assistant (Claude)
   - Tab 3: Fivetran: Automated Data Movement Platform
   - Tab 4: Snowflake: Data and AI Platform including Cortex (AI functions) and Streamlit (data apps)
-  - Tab 5: Fivetran Connector SDK Examples
+  - Tab 5: Fivetran Connector SDK Examples Open Source Github Repository
   - Tab 6: Fivetran Connector SDK Docs
 
 ## Mac Keyboard Shortcuts Reference
@@ -52,27 +52,27 @@ The Retail Dynamic Pricing RDP custom connector should fetch pricing, inventory,
 ### 1.2 Debug and Deploy the Custom Connector in VS Code
 1. When you see the connector.py code generated in the Anthropic Workbench, click the **Copy** button in the upper right of the code connector.py code block
 2. Go to **VS Code** with Command + Tab or open from the dock
-3. Click on the click on the `connector.py` file in your project
+3. Click on the `connector.py` file in your project
 4. Press Command+V to paste the connector code into the `connector.py` file
 5. Save the updated `connector.py` by pressing Command+S
 6. To test your code locally with configuration values specified in `configuration.json`, you can run the default Fivetran Connector SDK debug command:  
    `fivetran debug --configuration configuration.json`  
    This command provides out-of-the-box debugging without any additional scripting. 
-7. We have also created a helper script to debug and validate your connector with enhanced logging, state clearing and data validation. Run the following command from the VS Code terminal (bottom right). You can copy the `debug_and_validate` command using the icon in the right corner):
+7. We have created a helper script to debug and validate your connector with enhanced logging, state clearing and data validation. To run the helper script please run it in the VS Code terminal (bottom right). You can copy the `debug_and_validate` command using the icon on the right:
 
 ```
 ./debug_and_validate.sh
 ```
 
-8. When prompted with "Do you want to continue? (Y/n):", type `Y` and press Enter.
+8. When prompted with "Do you want to continue? (Y/N):", type `Y` and press Enter.
 
     - You'll see output displaying the results of the debug script including:
 
         - Resets the connector state by deleting the existing warehouse.db file and any saved sync checkpoints to start with a clean slate.
 
-        - Runs the fivetran debug command using your configuration file to test the connector in real time.
+        - Runs the fivetran debug command using your configuration file to test the connector in real time.(debug emulates a regular Fivetran sync where the schema() and update() methods are called).
 
-        - Triggers schema() and update() method calls, initiating data fetches with pagination and checkpoint saving for incremental sync.
+        - Excute the Custom `Connector.py` code you wrote fetching data and executing pagination and checkpoint saving for incremental sync as per your custom code and the current state variable. The helper script emulates an initial full sync.
 
         - Verifies data loading and schema creation by simulating a full sync (in this case, upserting 750 records into rdp_records).
 
@@ -83,11 +83,11 @@ The Retail Dynamic Pricing RDP custom connector should fetch pricing, inventory,
    This command deploys your code to Fivetran and creates or updates the connection. If the connection already exists, it prompts you before overwriting.  
    You can also provide additional optional parameters:  
    - `--configuration` to pass configuration values  
-   - `--force` to bypass confirmation prompts  
+   - `--force` to bypass confirmation prompts, great for CI/CD uses  
    - `--python-version` to specify Python runtime  
    - `--hybrid-deployment-agent-id` for non-default hybrid agent selection  
 
-10. To simplify the lab experience, we’ve created a helper script that wraps the deploy logic. Run the following command in the VS Code terminal(copy the command using the icon in the right corner):
+10. To simplify the lab experience, we’ve created a helper script that wraps the deploy logic. Run the following command in the VS Code terminal (copy the command using the icon in the right corner):
 
 ```
 ./deploy.sh
@@ -109,6 +109,8 @@ retail-dynamic-pricing-connector
 4. Click the **Start Initial Sync** button
 5. You should see a status message indicating that the sync is **Active** and that it is the first time syncing data for this connection.
 6. Once your sync completes, you will see a message "Next sync will run in x hours" and if you click on the **1 HOUR** selection on the right side, you will see some sync metrics.
+    * You may need to refresh the UI to see updated sync progress and logs in the UI. 
+7. Once your sync completes, you will see a message "Next sync will run in x hours" and if you click on the **1 HOUR** selection on the right side, you will see some sync metrics.
 
 ## Step 3: Create a Streamlit in Snowflake Gen AI Data App (5 minutes)
 

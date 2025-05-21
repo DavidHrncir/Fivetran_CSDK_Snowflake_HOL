@@ -108,7 +108,8 @@ healthcare-cds-connector
 3. Click on the connection to open the **Status** page
 4. Click the **Start Initial Sync** button
 5. You should see a status message indicating that the sync is **Active** and that it is the first time syncing data for this connection.
-6. Once your sync completes, you will see a message "Next sync will run in x hours" and if you click on the **1 HOUR** selection on the right side, you will see some sync metrics.
+     * you may need to refresh the UI to see updated sync progress and logs in the UI. 
+7. Once your sync completes, you will see a message "Next sync will run in x hours" and if you click on the **1 HOUR** selection on the right side, you will see some sync metrics.
 
 ## Step 3: Create a Streamlit in Snowflake Gen AI Data App (5 minutes)
 

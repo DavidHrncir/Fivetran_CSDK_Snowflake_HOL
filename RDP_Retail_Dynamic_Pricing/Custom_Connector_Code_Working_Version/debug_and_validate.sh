@@ -42,7 +42,7 @@ echo
 
 # Confirm
 echo -e "${BOLD}This will reset your connector, delete current state and warehouse.db files.${NC}"
-read -p "Do you want to continue? (Y/n): " -n 1 -r USER_CONFIRM
+read -p "Do you want to continue? (Y/N): " -n 1 -r USER_CONFIRM
 echo
 if [[ ! $USER_CONFIRM =~ ^[Yy]$ ]] && [[ ! -z $USER_CONFIRM ]]; then
     echo -e "${YELLOW}Operation cancelled by user.${NC}"

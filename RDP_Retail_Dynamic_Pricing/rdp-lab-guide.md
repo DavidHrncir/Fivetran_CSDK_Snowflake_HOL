@@ -41,7 +41,6 @@ The Retail Dynamic Pricing RDP custom connector should fetch pricing, inventory,
 - Provide a custom connector for Retail for the rdp_data endpoint. 1 table called rdp_records - all columns.  
 - Make sure you copy the configuration.json file exactly - do not add any other variables to it.
 - Here is the API spec: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/rdp_api_spec
-
 ```
 </details>
 

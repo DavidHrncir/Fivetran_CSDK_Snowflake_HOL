@@ -41,7 +41,6 @@ The QBR custom connector should fetch quarterly business review records from a R
 - Provide a custom connector for QBR for the qbr_data endpoint. 1 table called qbr_records - all columns.  
 - Make sure you copy the configuration.json file exactly - do not add any other variables to it.
 - Here is the API spec: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/qbr_api_spec
-
 ```
 </details>
 

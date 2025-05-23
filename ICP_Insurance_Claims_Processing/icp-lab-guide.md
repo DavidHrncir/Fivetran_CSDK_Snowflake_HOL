@@ -38,10 +38,9 @@ The Insurance ICP custom connector should fetch claims processing records from a
   <summary>Click to expand the User prompt and click the Copy icon in the right corner</summary>
 
 ```
-- Provide a custom connector for Insurance for the icp_data endpoint. 1 table called icp_records - all columns.  
+- Provide a custom connector for Insurance for the icp_data endpoint. 1 table called icp_records - all columns. 
 - Make sure you copy the configuration.json file exactly - do not add any other variables to it.
 - Here is the API spec: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/icp_api_spec
-
 ```
 </details>
 

@@ -96,7 +96,7 @@ The Healthcare CDS custom connector should fetch clinical decision support recor
 11. Click enter twice to accept the default values for the Fivetran Account Name and the Fivetran Destination. When prompted for the **connection name**, type in:
 
 ```
-healthcare-cds-connector
+cds_healthcare_connector
 ```
 
 11. Press Enter to deploy your new custom connector to Fivetran.

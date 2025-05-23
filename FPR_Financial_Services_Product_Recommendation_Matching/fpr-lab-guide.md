@@ -96,7 +96,7 @@ The Financial Services FPR custom connector should fetch financial product recom
 11. Click enter twice to accept the default values for the Fivetran Account Name and the Fivetran Destination. When prompted for the **connection name**, type in:
 
 ```
-financial-product-recommendation-connector
+financial_product_recommendation_connector
 ```
 
 12. Press Enter to deploy your new custom connector to Fivetran.

@@ -96,7 +96,7 @@ The QBR custom connector should fetch quarterly business review records from a R
 11. Click enter twice to accept the default values for the Fivetran Account Name and the Fivetran Destination. When prompted for the **connection name**, type in:
 
 ```
-quarterly-business-review-connector
+quarterly_business_review_connector
 ```
 
 12. Press Enter to deploy your new custom connector to Fivetran.

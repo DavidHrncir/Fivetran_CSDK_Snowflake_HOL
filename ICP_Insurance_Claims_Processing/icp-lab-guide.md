@@ -96,7 +96,7 @@ The Insurance ICP custom connector should fetch claims processing records from a
 11. Click enter twice to accept the default values for the Fivetran Account Name and the Fivetran Destination. When prompted for the **connection name**, type in:
 
 ```
-insurance-claims-processing-connector
+insurance_claims_processing_connector
 ```
 
 12. Press Enter to deploy your new custom connector to Fivetran.

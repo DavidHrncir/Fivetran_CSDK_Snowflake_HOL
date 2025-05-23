@@ -96,7 +96,7 @@ The Retail Dynamic Pricing RDP custom connector should fetch pricing, inventory,
 11. Click enter twice to accept the default values for the Fivetran Account Name and the Fivetran Destination. When prompted for the **connection name**, type in:
 
 ```
-retail-dynamic-pricing-connector
+retail_dynamic_pricing_connector
 ```
 
 12. Press Enter to deploy your new custom connector to Fivetran.

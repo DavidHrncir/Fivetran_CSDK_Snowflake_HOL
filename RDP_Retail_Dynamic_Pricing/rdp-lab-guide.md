@@ -186,7 +186,7 @@ st.markdown(f'''
 
 # Define available models as strings
 MODELS = [
-    "snowflake-llama-3.1-405b", "snowflake-llama-3.3-70b", "mistral-large2", "llama3.1-70b", "llama4-maverick", "llama4-scout", "claude-3-5-sonnet", "llama3.1-8b", "deepseek-r1"
+    "llama-3.1-8b", "snowflake-llama-3.1-405b", "snowflake-llama-3.3-70b", "mistral-large2", "llama3.1-70b", "llama4-maverick", "llama4-scout", "claude-3-5-sonnet", "deepseek-r1"
 ]
 
 if 'insights_history' not in st.session_state:

@@ -4,10 +4,9 @@ import pandas as pd
 import time
 import re
 
-# Cortex models available in Snowflake
+# Define available models as strings
 MODELS = [
-    "llama3.1-70b", "llama3.1-8b", "claude-3-5-sonnet", "deepseek-r1", "snowflake-llama-3.1-405b", "snowflake-llama-3.3-70b", "mistral-large2", "llama3.2-3b",
-    "llama3.1-405b", "mistral-7b", "jamba-1.5-large", "mixtral-8x7b", "reka-flash", "gemma-7b"
+    "llama-3.1-8b", "snowflake-llama-3.1-405b", "snowflake-llama-3.3-70b", "mistral-large2", "llama3.1-70b", "llama4-maverick", "llama4-scout", "claude-3-5-sonnet", "deepseek-r1"
 ]
 
 QBR_TEMPLATES = ["Standard QBR", "Executive Summary Only", "Technical Deep Dive", "Customer Success Focus"]

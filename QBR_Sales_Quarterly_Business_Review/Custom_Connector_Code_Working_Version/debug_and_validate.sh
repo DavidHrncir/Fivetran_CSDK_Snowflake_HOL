@@ -27,12 +27,7 @@ fi
 # Extract table name from connector.py (POSIX-compatible)
 TABLE_NAME=$(grep '"table"' "$CONNECTOR_FILE" | sed -E 's/.*"table": *"([^"]+)".*/\1/' | head -n 1)
 
-if [ -z "$TABLE_NAME" ]; then
-    echo -e "${YELLOW}Warning: Could not extract table name from connector.py. Using fallback 'qbr_records'.${NC}"
-    TABLE_NAME="qbr_records"
-else
-    echo -e "${GREEN}✓ Detected table name: $TABLE_NAME${NC}"
-fi
+echo -e "${GREEN}✓ Detected table name: $TABLE_NAME${NC}"
 
 # Display banner
 echo -e "${BLUE}${BOLD}===========================================================${NC}"
@@ -48,11 +43,10 @@ if [[ ! $USER_CONFIRM =~ ^[Yy]$ ]] && [[ ! -z $USER_CONFIRM ]]; then
     echo -e "${YELLOW}Operation cancelled by user.${NC}"
     exit 0
 fi
-
 # Step 1: Reset
 echo -e "${BOLD}Step 1: ${NC}Resetting Fivetran connector..."
+echo -e "${CYAN}Running command:${NC} fivetran reset"
 yes Y | fivetran reset
-
 if [ $? -ne 0 ]; then
     echo -e "${YELLOW}Reset failed. Exiting.${NC}"
     exit 1
@@ -60,10 +54,10 @@ fi
 
 echo -e "\n${GREEN}✓ Reset successful${NC}"
 echo -e "${BOLD}Step 2: ${NC}Running debug with configuration..."
+echo -e "${CYAN}Running command:${NC} fivetran debug --configuration configuration.json"
 echo -e "${YELLOW}(Real-time output will be displayed below)${NC}\n"
 export PYTHONUNBUFFERED=1
 fivetran debug --configuration "$CONFIG_FILE" | tee "$DEBUG_OUTPUT_FILE"
-
 echo -e "\n${GREEN}✓ Debug completed${NC}"
 echo -e "${BOLD}Step 3: ${NC}Querying sample data from DuckDB..."
 echo

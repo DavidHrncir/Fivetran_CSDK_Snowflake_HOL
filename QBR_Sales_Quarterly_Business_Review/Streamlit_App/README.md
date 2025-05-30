@@ -1,6 +1,6 @@
 # Enterprise QBR Generator
 
-![Enterprise QBR Generator](/QBR/images/qbrs.png)
+![Enterprise QBR Generator](images/qbrs.png)
 
 A Fivetran and Cortex-powered Streamlit in Snowflake data application for generating comprehensive Quarterly Business Reviews.
 

@@ -1,6 +1,6 @@
 # InsightEdge – AI-powered Consumer Insights Generation
 
-![InsightEdge](/CPG/images/InsightEdge.png)
+![InsightEdge](images/InsightEdge.png)
 
 A Fivetran and Cortex-powered Streamlit in Snowflake data application for Consumer Packaged Goods (CPG).
 

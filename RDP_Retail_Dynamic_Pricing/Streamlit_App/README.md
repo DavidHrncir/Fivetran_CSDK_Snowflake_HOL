@@ -1,6 +1,6 @@
 # PricePulse – AI-driven Dynamic Pricing
 
-![PricePulse](/RDP/images/PricePulse.png)
+![PricePulse](images/PricePulse.png)
 
 A Fivetran and Cortex-powered Streamlit in Snowflake data application for Retail.
 

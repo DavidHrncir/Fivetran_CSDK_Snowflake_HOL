@@ -94,7 +94,7 @@ st.markdown(f'''
 
 # Define available models as strings
 MODELS = [
-    "llama3.1-8b", "snowflake-llama-3.1-405b", "snowflake-llama-3.3-70b", "mistral-large2", "llama3.1-70b", "llama4-maverick", "llama4-scout", "claude-3-5-sonnet", "deepseek-r1"
+    "claude-4-sonnet", "claude-3-7-sonnet", "claude-3-5-sonnet", "llama3.1-8b", "llama3.1-70b", "llama4-maverick", "llama4-scout", "llama3.2-1b", "snowflake-llama-3.1-405b", "snowflake-llama-3.3-70b", "mistral-large2", "mistral-7b", "deepseek-r1", "snowflake-arctic", "reka-flash", "jamba-instruct", "gemma-7b"
 ]
 
 if 'insights_history' not in st.session_state:
@@ -694,7 +694,8 @@ with tabs[1]:
                 st.session_state.insights_history.append({
                     "timestamp": timestamp,
                     "focus": focus_area,
-                    "insights": insights
+                    "insights": insights,
+                    "model": selected_model
                 })
                 st.download_button("Download Insights", insights, file_name=f"{solution_name.replace(' ', '_').lower()}_insights.md")
             else:
@@ -705,7 +706,7 @@ with tabs[2]:
     st.subheader("📁 Insights History")
     if st.session_state.insights_history:
         for i, item in enumerate(reversed(st.session_state.insights_history)):
-            with st.expander(f"{item['timestamp']} - {item['focus']}", expanded=False):
+            with st.expander(f"{item['timestamp']} - {item['focus']} ({item['model']})", expanded=False):
                 st.markdown(item["insights"])
     else:
         st.info("No insights generated yet. Go to the AI Insights tab to generate some insights.")

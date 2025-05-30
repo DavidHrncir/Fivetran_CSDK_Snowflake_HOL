@@ -1,6 +1,6 @@
 # ClaimSphere – AI-driven Claims Processing Automation
 
-![ClaimSphere](/ICP/images/ClaimSphere.png)
+![ClaimSphere](images/ClaimSphere.png)
 
 A Fivetran and Cortex-powered Streamlit in Snowflake data application for Insurance.
 

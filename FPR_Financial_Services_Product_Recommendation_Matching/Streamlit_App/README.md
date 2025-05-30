@@ -1,6 +1,6 @@
 # FinMatch – AI-driven Financial Product Matching
 
-![FinMatch](/FPR/images/finmatch.png)
+![FinMatch](images/finmatch.png)
 
 A Fivetran and Cortex-powered Streamlit in Snowflake data application for Financial Services.
 

@@ -1,6 +1,6 @@
 # MedMind – AI-driven Clinical Decision Support for Healthcare
 
-![MedMind](/CDS/images/Medmind.png)
+![MedMind](images/Medmind.png)
 
 A Fivetran and Cortex-powered Streamlit in Snowflake data application for Healthcare.
 

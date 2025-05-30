@@ -26,7 +26,13 @@ The QBR custom connector should fetch quarterly business review records from a R
 - **Command+C**: Copy
 - **Command+V**: Paste
 - **Command+S**: Save
+- **Command+Tab**: Switch between applications
 - **Control+`**: Open terminal in VS Code
+
+## Trackpad/MousePad Reference
+- **Single finger tap**: Left click
+- **Two finger tap**: Right click
+- **Two finger slide**: Scroll up and down
 
 ## Step 1: Create a Custom Connector with the Fivetran Connector SDK (8 minutes)
 
@@ -128,7 +134,7 @@ import re
 
 # Define available models as strings
 MODELS = [
-    "llama3.1-8b", "snowflake-llama-3.1-405b", "snowflake-llama-3.3-70b", "mistral-large2", "llama3.1-70b", "llama4-maverick", "llama4-scout", "claude-3-5-sonnet", "deepseek-r1"
+    "claude-4-sonnet", "claude-3-7-sonnet", "claude-3-5-sonnet", "llama3.1-8b", "llama3.1-70b", "llama4-maverick", "llama4-scout", "llama3.2-1b", "snowflake-llama-3.1-405b", "snowflake-llama-3.3-70b", "mistral-large2", "mistral-7b", "deepseek-r1", "snowflake-arctic", "reka-flash", "jamba-instruct", "gemma-7b"
 ]
 
 QBR_TEMPLATES = ["Standard QBR", "Executive Summary Only", "Technical Deep Dive", "Customer Success Focus"]
@@ -621,7 +627,8 @@ def main():
                                 'date': pd.Timestamp.now(),
                                 'content': qbr_content,
                                 'template': template_type,
-                                'view_type': view_type
+                                'view_type': view_type,
+                                'model': selected_model
                             })
             else:
                 st.warning(f"No data available for {selected_company}. Please select another company.")
@@ -630,7 +637,8 @@ def main():
         if st.session_state.qbr_history:
             for qbr in reversed(st.session_state.qbr_history):
                 template_type = qbr.get('template', 'Standard QBR')  # Default to "Standard QBR" if not found
-                with st.expander(f"{qbr['company']} - {template_type} - {qbr['date'].strftime('%Y-%m-%d %H:%M')}"):
+                model_name = qbr.get('model', '')  # Get model name
+                with st.expander(f"{qbr['company']} - {template_type} - {qbr['date'].strftime('%Y-%m-%d %H:%M')} ({model_name})"):
                     st.write(qbr['content'])
         else:
             st.info("No QBR history available")

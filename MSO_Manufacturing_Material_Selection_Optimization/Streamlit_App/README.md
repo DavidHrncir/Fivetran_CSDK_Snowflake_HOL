@@ -1,6 +1,6 @@
 # MaterialMind – AI-powered Material Selection and Optimization
 
-![MaterialMind](/MSO/images/MaterialMind.png)
+![MaterialMind](images/MaterialMind.png)
 
 A Fivetran and Cortex-powered Streamlit in Snowflake data application for Manufacturing.
 

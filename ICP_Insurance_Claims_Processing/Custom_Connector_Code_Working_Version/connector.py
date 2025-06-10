@@ -15,13 +15,13 @@ def schema(configuration: dict):
     # Return minimal schema with ONLY table name and primary key
     return [
         {
-            "table": "fpr_records",
+            "table": "icp_records",
             "primary_key": ["record_id"]
         }
     ]
 
 def update(configuration: dict, state: dict):
-    """Extract data from the FPR API and yield operations"""
+    """Extract data from the Insurance ICP API and yield operations"""
 
     # 1. Validate configuration
     api_key = configuration.get('api_key')
@@ -40,7 +40,7 @@ def update(configuration: dict, state: dict):
     next_cursor = state.get('next_cursor')
 
     # 4. Pagination setup
-    url = f"{base_url}/fpr_data"
+    url = f"{base_url}/icp_data"
     params = {"page_size": page_size}
     if next_cursor:
         params["cursor"] = next_cursor
@@ -56,9 +56,9 @@ def update(configuration: dict, state: dict):
                 response.raise_for_status()
                 data = response.json()
 
-                records = data.get("fpr_records", [])
+                records = data.get("icp_records", [])
                 for record in records:
-                    yield op.upsert("fpr_records", record)
+                    yield op.upsert("icp_records", record)
                     record_count += 1
 
                     # Checkpoint after every 100 records

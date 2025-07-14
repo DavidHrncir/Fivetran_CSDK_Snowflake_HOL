@@ -1,10 +1,10 @@
-# Oil and Gas FTS Fivetran Custom Connector
+# Agriculture Animal Health Fivetran Custom Connector
 
-This connector uses the Fivetran Connector SDK to extract Oil and Gas Field Technician Task Summarization (FTS) data from an API and load it into Snowflake via Fivetran, powering LogLynx and other advanced field operations analytics applications.
+This connector uses the Fivetran Connector SDK to extract Agriculture Animal Health data from an API and load it into Snowflake via Fivetran, powering advanced agricultural animal health monitoring and farm management systems.
 
 ## Overview
 
-The Oil and Gas FTS connector fetches field technician task summaries from a REST API and loads them into a single table called `fts_records` in your Snowflake database. The connector retrieves detailed information about technician logs, maintenance activities, equipment servicing, and AI-generated task summaries, including properties like maintenance costs, downtime hours, failure rates, and time savings from automated summarization. It handles authentication, pagination, error handling, and maintains state between sync runs using a cursor-based approach.
+The Agriculture Animal Health connector fetches livestock health and environmental data from a REST API and loads it into a single table called `agr_records` in your Snowflake database. The connector retrieves detailed information about farm animals, health status monitoring, vaccination tracking, environmental conditions, and AI-powered health risk predictions, including properties like predicted health risks, medication histories, weather impacts, and recommended care actions. It handles authentication, pagination, error handling, and maintains state between sync runs using a cursor-based approach.
 
 ## Features
 
@@ -12,15 +12,15 @@ The Oil and Gas FTS connector fetches field technician task summaries from a RES
 - **State management**: Tracks sync progress and saves checkpoints every 100 records
 - **Error handling**: Gracefully handles API and runtime errors with detailed logging
 - **Configuration management**: Customizable API endpoint, page size, and authentication
-- **Minimal permissions**: Requires only an API key to access the FTS data
-- **Data enrichment**: Extracts 14 key metrics and attributes related to field technician task summarization
-- **Efficient processing**: Handles large datasets (750+ records) with minimal resource usage
-- **Field operations-specific**: Designed to handle technician log data common in oil and gas field operations
+- **Minimal permissions**: Requires only an API key to access the agriculture data
+- **Data enrichment**: Extracts comprehensive agricultural metrics and attributes
+- **Efficient processing**: Handles large datasets with minimal resource usage
+- **Agriculture-specific**: Designed to handle animal health data common in modern livestock farming operations
 
 ## Project Structure
 
 ```
-fts/
+agriculture/
 ├── configuration.json     # Configuration parameters for the connector
 ├── connector.py           # Main connector implementation
 ├── debug_and_reset.sh     # Script for testing and resetting the connector
@@ -34,17 +34,17 @@ The connector uses the following configuration parameters:
 
 | Parameter    | Description                                            | Default Value                                             |
 |--------------|--------------------------------------------------------|-----------------------------------------------------------|
-| `api_key`    | API key for authentication to the FTS API              | Required                                                  |
-| `base_url`   | Base URL for the FTS API                               | `https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com` |
+| `api_key`    | API key for authentication to the Agriculture API      | Required                                                  |
+| `base_url`   | Base URL for the Agriculture API                       | `https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com` |
 | `page_size`  | Number of records to fetch per API request             | `100`                                                     |
 
-## FTS API Details
+## Agriculture API Details
 
 ### Endpoint
 
-The connector uses the following REST API endpoint to access field technician task summarization data:
+The connector uses the following REST API endpoint to access agricultural animal health data:
 
-- `GET /fts_data`: Retrieves a paginated list of Oil and Gas Field Technician Task Summarization records
+- `GET /agr_data`: Retrieves a paginated list of Agriculture Animal Health records
 
 ### Query Parameters
 
@@ -61,37 +61,39 @@ api_key: YOUR_API_KEY
 
 ### Data Schema
 
-The FTS API returns records with the following structure:
+The Agriculture API returns animal health records with the following structure:
 
 | Field                              | Type    | Description                                   |
 |------------------------------------|---------|-----------------------------------------------|
-| `record_id`                        | string  | Unique identifier for the technician task summary record (primary key) |
-| `log_date`                         | date    | The date when the task log was recorded       |
-| `technician_id`                    | string  | Unique identifier for the technician who performed the task |
-| `log_description`                  | string  | Detailed description of the task performed by the technician |
-| `equipment_id`                     | string  | Unique identifier for the equipment on which the task was performed |
-| `maintenance_type`                 | string  | Type of maintenance performed (Predictive, Corrective, Condition-Based) |
-| `maintenance_status`               | string  | Current status of the maintenance task (Completed, Delayed, In Progress, Cancelled) |
-| `erp_order_id`                     | string  | Enterprise Resource Planning (ERP) order ID associated with the task |
-| `customer_id`                      | string  | Unique identifier for the customer associated with the task |
-| `summarized_log`                   | string  | AI-generated summarized version of the task log |
-| `failure_rate`                     | float   | Calculated failure rate associated with the equipment or task |
-| `maintenance_cost`                 | float   | Total cost incurred for the maintenance task  |
-| `downtime_hours`                   | integer | Number of hours the equipment was down due to maintenance |
-| `summarization_time_saved`         | integer | Estimated time saved (in hours) by using AI summarization |
+| `record_id`                        | string  | Unique identifier for the animal health record (primary key) |
+| `animal_id`                        | string  | Unique identifier for the individual animal   |
+| `farm_id`                          | string  | Unique identifier for the farm                |
+| `species`                          | string  | Species of the animal (Beef Cattle, Chickens, Pigs, etc.) |
+| `breed`                            | string  | Specific breed of the animal                  |
+| `age`                              | number  | Age of the animal in years                    |
+| `weight`                           | float   | Weight of the animal                          |
+| `health_status`                    | string  | Current health status (Healthy, Sick, Injured, etc.) |
+| `vaccination_history`              | string  | Vaccination status (Up-to-date, Overdue, Not vaccinated) |
+| `medication_history`               | string  | Medication history (Current, Previous, None)  |
+| `weather_data`                     | string  | Weather conditions (Sunny, Rainy, Snowy, etc.) |
+| `temperature`                      | float   | Environmental temperature                     |
+| `humidity`                         | float   | Environmental humidity percentage             |
+| `precipitation`                    | float   | Precipitation amount                          |
+| `predicted_health_risk`            | float   | AI-predicted health risk score (0.0-1.0)     |
+| `recommended_action`               | string  | Recommended care action (Monitor closely, Administer medication, etc.) |
 
 ## Implementation Details
 
 ### Schema Definition
 
-The connector defines a simple schema with a single table `fts_records` and specifies `record_id` as the primary key.
+The connector defines a simple schema with a single table `agr_records` and specifies `record_id` as the primary key.
 
 ```python
 def schema(configuration: dict):
     # Return minimal schema with ONLY table name and primary key
     return [
         {
-            "table": "fts_records",
+            "table": "agr_records",
             "primary_key": ["record_id"]
         }
     ]
@@ -127,7 +129,7 @@ The connector uses this workflow to efficiently process large datasets while mai
 
 1. Clone or create the project directory:
    ```bash
-   mkdir fts && cd fts
+   mkdir agriculture && cd agriculture
    ```
 
 2. Create the required files:
@@ -161,7 +163,7 @@ The `debug_and_reset.sh` script includes the following steps:
 When you run the debug script, you'll see output similar to the following:
 
 ```
-✓ Detected table name: fts_records
+✓ Detected table name: agr_records
 ===========================================================
          Fivetran Connector Debug & Reset Script          
 ===========================================================
@@ -178,7 +180,7 @@ Step 2: Running debug with configuration...
 May 17, 2025 10:01:09 AM INFO Fivetran-Connector-SDK: Debugging connector at: /path/to/connector
 May 17, 2025 10:01:09 AM INFO Fivetran-Connector-SDK: Running connector tester...
 May 17, 2025 10:01:12 AM INFO Fivetran-Connector-SDK: Initiating the 'schema' method call...
-May 17, 2025 10:01:12 AM: INFO Fivetran-Tester-Process: [SchemaChange]: tester.fts_records 
+May 17, 2025 10:01:12 AM: INFO Fivetran-Tester-Process: [SchemaChange]: tester.agr_records 
 May 17, 2025 10:01:12 AM INFO Fivetran-Connector-SDK: Initiating the 'update' method call...
 
 May 17, 2025 10:01:12 AM INFO: Fetching data with params: {'page_size': 100}
@@ -192,16 +194,16 @@ May 17, 2025 10:01:12 AM INFO: No more pages to fetch
 ✓ Debug completed
 
 Step 3: Querying sample data from DuckDB...
-Running query: SELECT * FROM tester.fts_records LIMIT 5;
+Running query: SELECT * FROM tester.agr_records LIMIT 5;
 
 ┌──────────────────────┬─────────────────┬──────────────────────┬──────────────────┬───┬──────────────┬───────────────┬─────────────┐
-│      record_id       │ maintenance_cost│ maintenance_status   │ maintenance_type │ … │ technician_id│ equipment_id  │ customer_id │
-├──────────────────────┼─────────────────┼──────────────────────┼──────────────────┼───┼──────────────┼───────────────┼─────────────┤
-│ 20040c16-ddca-4bcd…  │         157.03  │ Delayed              │ Predictive       │ … │ TECH_000000  │ EQUIP_000000  │ CUST_000000 │
-│ 530e4b98-a812-481e…  │         383.56  │ Completed            │ Corrective       │ … │ TECH_000001  │ EQUIP_000001  │ CUST_000001 │
-│ e441d4b3-d4e3-4a5a…  │         815.95  │ Cancelled            │ Corrective       │ … │ TECH_000002  │ EQUIP_000002  │ CUST_000002 │
-│ 6697ec2a-909c-480d…  │         964.86  │ Completed            │ Condition-Based  │ … │ TECH_000003  │ EQUIP_000003  │ CUST_000003 │
-│ 48680f93-ad2d-4a97…  │         476.28  │ In Progress          │ Predictive       │ … │ TECH_000004  │ EQUIP_000004  │ CUST_000004 │
+│      record_id       │ farm_id         │ animal_id            │ species          │ … │ health_status │ predicted_health_risk │ recommended_action │
+├──────────────────────┼─────────────────┼──────────────────────┼──────────────────┼───┼───────────────┼───────────────────────┼────────────────────┤
+│ 42e76305-0fdf-44a6…  │ FARM_000000     │ ANIMAL_000000        │ Beef Cattle      │ … │ Healthy       │ 0.87                  │ Monitor closely    │
+│ 11c55de5-44cf-4d7c…  │ FARM_000000     │ ANIMAL_000001        │ Beef Cattle      │ … │ Deceased      │ 0.18                  │ No action required │
+│ 1d2dfc75-1224-4057…  │ FARM_000000     │ ANIMAL_000002        │ Beef Cattle      │ … │ Healthy       │ 0.17                  │ No action required │
+│ bafc9f34-a011-4a08…  │ FARM_000000     │ ANIMAL_000003        │ Beef Cattle      │ … │ Sick          │ 0.51                  │ No action required │
+│ d42435be-82c2-4bc4…  │ FARM_000000     │ ANIMAL_000004        │ Beef Cattle      │ … │ Sick          │ 0.27                  │ No action required │
 └──────────────────────┴─────────────────┴──────────────────────┴──────────────────┴───┴──────────────┴───────────────┴─────────────┘
 
 ==================== OPERATION SUMMARY ====================
@@ -249,7 +251,7 @@ In this output, you can observe:
 3. When prompted, enter:
    - Your Fivetran account name (default: MDS_SNOWFLAKE_HOL)
    - Your Fivetran destination name (default: NEW_SALES_ENG_HANDS_ON_LAB)
-   - A unique name for your connector (e.g., a_new_fts_connector)
+   - A unique name for your connector (e.g., agr_0714)
 
 4. The script will package and upload your connector to Fivetran
 
@@ -264,20 +266,25 @@ The `deploy.sh` script performs the following actions:
 
 Sample output from a successful deployment:
 ```
+Enter your Fivetran Account Name [MDS_SNOWFLAKE_HOL]: 
+Enter your Fivetran Destination Name [NEW_SALES_ENG_HANDS_ON_LAB]: 
+Enter a unique Fivetran Connector Name [my_new_fivetran_custom_connector]: agr_0714
 Deploying connector...
-✓ Packaging your project for upload...
-✓ Uploading your project...
-The connection 'a_new_fts_connector' has been created successfully.
-Python Version: 3.12.8
-Connection ID: spleen_divide
-Visit the Fivetran dashboard to start the initial sync: https://fivetran.com/dashboard/connectors/spleen_divide/status
+Jul 14, 2025 08:03:21 AM INFO Fivetran-Connector-SDK: Packaging your project for upload... 
+✓
+Jul 14, 2025 08:03:21 AM INFO Fivetran-Connector-SDK: Uploading your project... 
+✓
+Jul 14, 2025 08:03:24 AM INFO Fivetran-Connector-SDK: The connection 'agr_0714' has been created successfully.
+Jul 14, 2025 08:03:24 AM INFO Fivetran-Connector-SDK: Python version 3.12 to be used at runtime. 
+Jul 14, 2025 08:03:24 AM INFO Fivetran-Connector-SDK: Connection ID: academic_calyx 
+Jul 14, 2025 08:03:24 AM INFO Fivetran-Connector-SDK: Visit the Fivetran dashboard to start the initial sync: https://fivetran.com/dashboard/connectors/academic_calyx/status
 ```
 
 ### What to Expect After Deployment
 
 After successful deployment:
 
-1. The connector will be created in your Fivetran account with a randomly generated Connection ID (e.g., `spleen_divide`)
+1. The connector will be created in your Fivetran account with a randomly generated Connection ID (e.g., `academic_calyx`)
 2. You'll be provided a link to access the connector in the Fivetran dashboard
 3. The connector will be ready for its initial sync
 
@@ -285,7 +292,7 @@ In the Fivetran dashboard, you will be able to:
 - View your connector's sync status
 - Configure sync frequency (hourly, daily, etc.)
 - Monitor for any errors or warnings
-- View the destination schema with the `fts_records` table in Snowflake
+- View the destination schema with the `agr_records` table in Snowflake
 - Track the data volume and record count
 - Configure schema and field mapping if needed
 
@@ -296,7 +303,7 @@ The first sync will extract all available data, while subsequent syncs will be i
 ### Common Issues
 
 - **API Key Issues**: Ensure your API key is valid and has the correct permissions
-- **Network Connectivity**: Check that your network can reach the FTS API endpoint
+- **Network Connectivity**: Check that your network can reach the Agriculture API endpoint
 - **Schema Changes**: If the API changes its schema, you may need to update the connector
 - **Cursor Issues**: If the cursor becomes invalid, reset the connector to perform a full sync
 - **Memory Limitations**: For very large datasets, consider decreasing the page size
@@ -329,15 +336,16 @@ To extend or modify this connector:
 
 ### Adding New Fields
 
-1. If the FTS API adds new fields, you can capture them automatically. Since the connector uses the entire record for upserts, new fields will be included without schema changes.
+1. If the Agriculture API adds new fields, you can capture them automatically. Since the connector uses the entire record for upserts, new fields will be included without schema changes.
 
 2. To add transformations or derived fields:
    ```python
    # Example of adding a derived field in the update function
    for record in records:
        # Add a derived field based on existing data
-       record['cost_per_hour'] = record['maintenance_cost'] / record['downtime_hours'] if record['downtime_hours'] > 0 else 0
-       yield op.upsert("fts_records", record)
+       record['health_risk_category'] = 'High' if record['predicted_health_risk'] > 0.7 else 'Medium' if record['predicted_health_risk'] > 0.3 else 'Low'
+       record['needs_attention'] = record['health_status'] in ['Sick', 'Injured'] or record['predicted_health_risk'] > 0.8
+       yield op.upsert("agr_records", record)
    ```
 
 ### Supporting Multiple Tables
@@ -347,43 +355,70 @@ To extend or modify this connector:
    def schema(configuration: dict):
        return [
            {
-               "table": "fts_records",
+               "table": "agr_records",
                "primary_key": ["record_id"]
            },
            {
-               "table": "fts_technicians",
-               "primary_key": ["technician_id"]
+               "table": "farm_summary",
+               "primary_key": ["farm_id"]
+           },
+           {
+               "table": "animal_health_analytics",
+               "primary_key": ["species", "farm_id"]
            }
        ]
    ```
 
 2. Modify the update function to yield operations for multiple tables:
    ```python
-   # Example: Creating technician records from FTS data
-   technician_records = {}
+   # Example: Creating farm summary records from animal health data
+   farm_summaries = {}
+   animal_health_analytics = {}
+   
    for record in records:
-       # Extract technician info for separate table
-       technician_id = record['technician_id']
-       if technician_id not in technician_records:
-           technician_records[technician_id] = {
-               'technician_id': technician_id,
-               'total_tasks': 1,
-               'total_maintenance_cost': record['maintenance_cost'],
-               'total_downtime_hours': record['downtime_hours'],
-               'total_time_saved': record['summarization_time_saved']
+       # Extract farm summary info for separate table
+       farm_id = record['farm_id']
+       if farm_id not in farm_summaries:
+           farm_summaries[farm_id] = {
+               'farm_id': farm_id,
+               'total_animals': 1,
+               'healthy_animals': 1 if record['health_status'] == 'Healthy' else 0,
+               'at_risk_animals': 1 if record['predicted_health_risk'] > 0.7 else 0,
+               'avg_health_risk': record['predicted_health_risk']
            }
        else:
-           tech_rec = technician_records[technician_id]
-           tech_rec['total_tasks'] += 1
-           tech_rec['total_maintenance_cost'] += record['maintenance_cost']
-           tech_rec['total_downtime_hours'] += record['downtime_hours']
-           tech_rec['total_time_saved'] += record['summarization_time_saved']
+           farm_sum = farm_summaries[farm_id]
+           farm_sum['total_animals'] += 1
+           farm_sum['healthy_animals'] += 1 if record['health_status'] == 'Healthy' else 0
+           farm_sum['at_risk_animals'] += 1 if record['predicted_health_risk'] > 0.7 else 0
+           farm_sum['avg_health_risk'] = (farm_sum['avg_health_risk'] + record['predicted_health_risk']) / 2
+       
+       # Extract animal health analytics by species
+       species_key = f"{record['species']}_{record['farm_id']}"
+       if species_key not in animal_health_analytics:
+           animal_health_analytics[species_key] = {
+               'species': record['species'],
+               'farm_id': record['farm_id'],
+               'avg_health_risk': record['predicted_health_risk'],
+               'total_animals': 1,
+               'vaccination_compliance': 1 if record['vaccination_history'] == 'Up-to-date' else 0
+           }
+       else:
+           analytics = animal_health_analytics[species_key]
+           analytics['total_animals'] += 1
+           analytics['vaccination_compliance'] += 1 if record['vaccination_history'] == 'Up-to-date' else 0
+           analytics['avg_health_risk'] = (analytics['avg_health_risk'] + record['predicted_health_risk']) / 2
+       
        # Yield the original record
-       yield op.upsert("fts_records", record)
+       yield op.upsert("agr_records", record)
    
-   # Yield all unique technician records
-   for technician in technician_records.values():
-       yield op.upsert("fts_technicians", technician)
+   # Yield all farm summaries
+   for farm_summary in farm_summaries.values():
+       yield op.upsert("farm_summary", farm_summary)
+   
+   # Yield all animal health analytics
+   for health_analytic in animal_health_analytics.values():
+       yield op.upsert("animal_health_analytics", health_analytic)
    ```
 
 ### Dependencies Management
@@ -395,78 +430,69 @@ To add external dependencies:
    ```
    requests>=2.25.0
    python-dateutil>=2.8.1
+   pandas>=1.3.0
    ```
 3. The Fivetran deployment process will automatically install these dependencies in the connector environment
 
-## Downstream Application: LogLynx
+## Downstream Applications
 
-The data extracted by this connector powers LogLynx, an AI-driven field technician log summarization and analysis system designed for oil and gas companies. The application is built as a Streamlit in Snowflake data application, utilizing both Fivetran and Cortex for data integration and analysis in the energy industry.
+The data extracted by this connector can power various agricultural animal health monitoring applications and livestock management systems, such as:
 
-### Application Purpose
-
-LogLynx helps energy teams:
-- Automate summarization of daily logs from field technicians
-- Reduce maintenance costs through better analysis and decision-making
-- Minimize equipment downtime through improved maintenance scheduling
-- Save time on manual log summarization tasks
-- Identify trends and patterns in equipment failures and maintenance activities
+### Animal Health Management Dashboards
+- **Health Risk Analytics**: Track predicted health risks, vaccination compliance, and disease patterns
+- **Environmental Impact Monitoring**: Analyze weather and environmental factors affecting animal health
+- **Preventive Care Optimization**: Schedule vaccinations, medications, and health interventions
 
 ### Target Users
-
-- Field Technicians
-- Maintenance Managers
-- Operations Managers
-- Chief Operating Officer (COO)
+- Livestock Veterinarians and Animal Health Specialists
+- Farm Managers and Operations Teams
+- Agricultural Research Scientists
+- Animal Welfare Compliance Officers
+- Agricultural Insurance Assessors
 
 ### Data Flow Architecture
+1. **Animal Health Data Sources** → 2. **Agriculture API** → 3. **Fivetran Custom Connector** → 4. **Snowflake Data Warehouse** → 5. **Health Analytics Applications**
 
-1. **Data Sources** → 2. **FTS API** → 3. **Fivetran Custom Connector** → 4. **Snowflake Data Warehouse** → 5. **Streamlit in Snowflake Application**
+### Simulated Agricultural Data Sources
+The Agriculture API provides synthetic data that simulates information from various livestock management systems:
 
-### Simulated Oil and Gas Data Sources
-
-The FTS API provides synthetic data that simulates information from various oil and gas field operations systems:
-
-- **Field Technician Logs**: 
-  - SAP
-  - Oracle
-  - Microsoft Dynamics
-- **Computerized Maintenance Management Systems (CMMS)**: 
-  - IBM Maximo
-  - Infor EAM
-  - SAP EAM
-- **Enterprise Resource Planning (ERP) Systems**: 
-  - SAP
-  - Oracle
-  - Microsoft Dynamics
-
-This approach allows for realistic field operations analytics without using proprietary technician data, making it ideal for demonstration, development, and training purposes.
+- **Animal Health Management Systems**: 
+  - VetSuccess by Henry Schein
+  - AgriWebb Livestock Management
+  - CattleMax Farm Management
+- **Environmental Monitoring Platforms**: 
+  - Davis Weather Stations
+  - AgSense Remote Monitoring
+  - Climate FieldView Environmental Data
+- **Farm Management Software**: 
+  - FarmLogs by Farmers Business Network
+  - Granular Farm Management
+  - Conservis Integrated Farm Management
 
 ### Analytics Capabilities
-
-The LogLynx application provides:
-- Automated AI-powered summarization of field technician logs
-- Analysis of maintenance costs and patterns across equipment and technicians
-- Equipment failure rate tracking and trend analysis
-- Maintenance type effectiveness evaluation (Predictive vs. Corrective vs. Condition-Based)
-- Technician performance metrics and time savings quantification
-- Downtime analysis and optimization recommendations
-- Customer-specific maintenance insights and reporting
+Applications built on this data can provide:
+- Predictive health risk modeling using AI and environmental factors
+- Vaccination and medication tracking and compliance reporting
+- Weather impact analysis on animal health outcomes
+- Species-specific health trend analysis and benchmarking
+- Early disease outbreak detection and prevention strategies
+- Animal welfare monitoring and regulatory compliance reporting
+- Cost optimization for veterinary care and medication management
 
 ### Expected Business Results
-
-Based on the LogLynx solution profile, the application delivers:
-- **300 fewer failed treatments per year** (15% reduction from 3% baseline failure rate)
-- **$1,200,000 in maintenance cost savings annually** (30% reduction from $4M annual costs)
-- **25% reduction in maintenance downtime** (300 hours saved per year)
-- **90% reduction in manual summarization time** (1,200 hours saved per year)
+Agricultural animal health analytics applications using this data can deliver:
+- **20-25% reduction in animal mortality** through early disease detection
+- **30% improvement in vaccination compliance** through automated tracking
+- **40% decrease in veterinary costs** through preventive care optimization
+- **50% reduction in disease outbreak incidents** through predictive monitoring
 
 ## Notes
 
-- This connector creates a single table named `fts_records` in your Snowflake database
+- This connector creates a single table named `agr_records` in your Snowflake database
 - The connector uses checkpoints to track sync progress, enabling resumable syncs
 - The connector is configured to use cursor-based pagination for efficient data extraction
 - During initial sync, all records will be loaded; subsequent syncs will only fetch new or updated records
-- The FTS API returns approximately 750 field technician task summarization records in a complete dataset
+- The Agriculture API returns comprehensive agricultural records in a complete dataset
 - The connector handles paginated requests with a default of 100 records per page
-- The data is optimized for use with Snowflake and the LogLynx field operations application
-- While this connector uses synthetic data, the approach mirrors real-world field technician log extraction patterns
+- The data is optimized for use with Snowflake and agricultural animal health analytics applications
+- While this connector uses synthetic data, the approach mirrors real-world livestock health data extraction patterns

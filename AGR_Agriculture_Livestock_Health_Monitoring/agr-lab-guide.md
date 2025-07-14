@@ -1,9 +1,9 @@
-# Fivetran Connector SDK Hands on Lab at Snowflake Summit 2025: Oil and Gas Field Technician Summarization
+# Fivetran Connector SDK Hands on Lab at Snowflake Summit 2025: Agriculture Livestock Health Monitoring
 
 ## Overview
-In this 20-minute hands on lab, you'll build a **custom Fivetran connector** using the **Fivetran Connector SDK** and the **Anthropic Workbench** to integrate oil and gas field technician summarization data from a custom REST API into Snowflake. You'll then create a **Streamlit in Snowflake** application powering oil and gas metrics and **Snowflake Cortex AI-driven** field technician task summarization and optimization applications.
+In this 20-minute hands on lab, you'll build a **custom Fivetran connector** using the **Fivetran Connector SDK** and the **Anthropic Workbench** to integrate agriculture livestock health monitoring data from a custom REST API into Snowflake. You'll then create a **Streamlit in Snowflake** application powering agriculture metrics and **Snowflake Cortex AI-driven** livestock health summarization and optimization applications.
 
-The Oil and Gas FTS custom connector should fetch field technician records from a REST API and load them into a single table called `fts_records` in your Snowflake database. The connector should deliver detailed information about field operations, maintenance activities, and technician log summarization for oil and gas operations, including properties like failure rates, maintenance costs, downtime hours, and summarization time savings. It should handle authentication, pagination, error handling, and maintain state between sync runs using a cursor-based approach.
+The Agriculture AGR custom connector should fetch livestock health records from a REST API and load them into a single table called `agr_records` in your Snowflake database. The connector should deliver detailed information about livestock health monitoring, veterinary care activities, and AI-powered health risk assessment for agricultural operations, including properties like predicted health risks, vaccination compliance, medication histories, and environmental impact analysis. It should handle authentication, pagination, error handling, and maintain state between sync runs using a cursor-based approach.
 
 ## Lab Steps Quick Access
 
@@ -44,15 +44,15 @@ The Oil and Gas FTS custom connector should fetch field technician records from 
   <summary>Click to expand the User prompt and click the Copy icon in the right corner</summary>
 
 ```
-- Provide a custom connector for Oil and Gas for the fts_data endpoint. 1 table called fts_records - all columns.  
+- Provide a custom connector for Agriculture for the agr_data endpoint. 1 table called agr_records - all columns. 
 - Make sure you copy the configuration.json file exactly - do not add any other variables to it.
-- Here is the API spec: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/fts_api_spec
+- Here is the API spec: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/agr_api_spec
 ```
 </details>
 
 3. Click the black **Run** button in the upper right
-4. After Claude generates the connector.py code, you will see a response similar to the example connector, but updated for the oil and gas field technician summarization dataset.
-5. Click [fts_data](https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/fts_data) if you'd like to see the dataset.
+4. After Claude generates the connector.py code, you will see a response similar to the example connector, but updated for the agriculture livestock health monitoring dataset.
+5. Click [agr_data](https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/agr_data) if you'd like to see the dataset.
 
 ### 1.2 Debug and Deploy the Custom Connector in VS Code
 1. When you see the connector.py code generated in the Anthropic Workbench, click the **Copy** button in the upper right of the code connector.py code block
@@ -79,7 +79,7 @@ The Oil and Gas FTS custom connector should fetch field technician records from 
 
         - Execute the Custom `Connector.py` code you wrote fetching data and executing pagination and checkpoint saving for incremental sync as per your custom code and the current state variable. The helper script emulates an initial full sync.
 
-        - Verifies data loading and schema creation by simulating a full sync (in this case, upserting 750 records into fts_records).
+        - Verifies data loading and schema creation by simulating a full sync (in this case, upserting 750 records into agr_records).
 
         - Queries and displays sample records from the resulting DuckDB table to confirm the connector outputs expected data.
 
@@ -101,7 +101,7 @@ The Oil and Gas FTS custom connector should fetch field technician records from 
 11. Click enter twice to accept the default values for the Fivetran Account Name and the Fivetran Destination. When prompted for the **connection name**, type in:
 
 ```
-oil_gas_fts_connector
+agriculture_agr_connector
 ```
 
 12. Press Enter to deploy your new custom connector to Fivetran.
@@ -109,7 +109,7 @@ oil_gas_fts_connector
 ## Step 2: Start Data Sync in Fivetran (3 minutes)
 
 1. Switch to **Chrome Tab 3 (Fivetran Automated Data Movement)**
-2. Refresh the page and find your newly created connection named "oil-gas-fts-connector" in the connections list
+2. Refresh the page and find your newly created connection named "agriculture-agr-connector" in the connections list
 3. Click on the connection to open the **Status** page
 4. Click the **Start Initial Sync** button
 5. You should see a status message indicating that the sync is **Active** and that it is the first time syncing data for this connection.
@@ -136,73 +136,71 @@ from datetime import datetime
 from snowflake.snowpark.context import get_active_session
 
 st.set_page_config(
-    page_title="loglynx_–_ai_driven_field_technician_task_summarization",
+    page_title="livestock_health_guardian_–_ai_driven_livestock_health_monitoring",
     page_icon="https://i.imgur.com/Og6gFnB.png",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-solution_name = '''Solution 1: LogLynx – AI-driven Field Technician Task Summarization'''
-solution_name_clean = '''loglynx_–_ai_driven_field_technician_task_summarization'''
-table_name = '''LOGLYNX'''
-table_description = '''Consolidated data from field technician logs, CMMS, and ERP systems for LogLynx solution'''
-solution_content = '''Solution 1: LogLynx – AI-driven Field Technician Task Summarization**
+solution_name = '''Solution 1: Livestock Health Guardian – AI-driven Livestock Health Monitoring'''
+solution_name_clean = '''livestock_health_guardian_–_ai_driven_livestock_health_monitoring'''
+table_name = '''AGR_RECORDS'''
+table_description = '''Integrated data from farm management software, livestock health records, and weather data for real-time monitoring and predictive analytics'''
+solution_content = '''Solution 1: Livestock Health Guardian – AI-driven Livestock Health Monitoring**
 
 ### Business Challenge
-The primary business challenge addressed by LogLynx is the manual and time-consuming process of summarizing daily logs from field technicians in the Oil and Gas industry. This process hinders the ability to quickly identify trends, patterns, and potential issues, leading to delayed maintenance, increased costs, and reduced operational efficiency.
+The primary business challenge addressed by Livestock Health Guardian is the need for early detection and prevention of livestock health issues, reducing the risk of disease outbreaks and improving overall animal welfare.
 
 ### Key Features
-- Automated summarization of daily logs from field technicians
-- Real-time data analysis and insights
-- Customizable dashboards for easy monitoring and decision-making
-- Integration with existing CMMS (Computerized Maintenance Management System) and ERP (Enterprise Resource Planning) systems
+• Real-time monitoring of vital signs and behavior
+• Advanced predictive analytics for early disease detection
+• Personalized health recommendations for each animal
+• Integration with farm management software for seamless data exchange
 
 ### Data Sources
-- Field Technician Logs: SAP, Oracle, Microsoft Dynamics
-- CMMS: IBM Maximo, Infor EAM, SAP EAM
-- ERP: SAP, Oracle, Microsoft Dynamics
+• Farm Management Software: Granular, Trimble Ag, Climate FieldView
+• Livestock Health Records: Zoetis, Merck Animal Health, Elanco
+• Weather Data: The Weather Company, AccuWeather, DTN
 
 ### Competitive Advantage
-LogLynx differentiates itself by leveraging generative AI to automate the summarization process, reducing manual labor and increasing the speed of insights. This allows for faster decision-making and improved operational efficiency.
+Livestock Health Guardian differentiates itself through its use of advanced generative AI algorithms, enabling early detection of health issues and personalized recommendations for each animal. This creates a competitive advantage by reducing the risk of disease outbreaks and improving animal welfare.
 
 ### Key Stakeholders
-- Field Technicians
-- Maintenance Managers
-- Operations Managers
-- C-level Executive: Chief Operating Officer (COO)
+• Farm Managers
+• Veterinarians
+• Livestock Owners
+
+### Top C-level Executive
+CEO of the farm or agricultural company
 
 ### Technical Approach
-LogLynx utilizes a combination of natural language processing (NLP) and machine learning algorithms to analyze and summarize field technician logs. This approach enables the system to identify key information, trends, and patterns, providing actionable insights for maintenance and operations teams.
+Generative AI is used to analyze vast amounts of data from various sources, including farm management software, livestock health records, and weather data. This analysis enables the system to identify patterns and anomalies, predicting potential health issues before they become severe.
 
 ### Expected Business Results
-- **300 fewer failed treatments per year**
-  **10,000 field technician logs × 3% baseline failure rate × 15% reduction = 300 fewer failed treatments/year**
-- **$ 1,200,000 in maintenance cost savings annually**
-  **$ 4,000,000 annual maintenance costs × 30% reduction = $ 1,200,000 savings/year**
-- **25% reduction in maintenance downtime**
-  **100 hours of downtime/month × 12 months/year × 25% reduction = 300 hours saved/year**
-- **90% reduction in manual summarization time**
-  **100 hours/month × 12 months/year × 90% reduction = 1,200 hours saved/year**
+• **300 fewer failed treatments per year**
+  **10,000 animals × 3% baseline treatment failure rate × 10% reduction = 300 fewer failed treatments/year**
+• **$ 1,200,000 in reduced veterinary costs annually**
+  **$ 4,000,000 annual veterinary costs × 30% reduction = $ 1,200,000 savings/year**
+• **20% increase in animal productivity**
+  **80,000 animals × 20% baseline productivity rate × 20% improvement = 32,000 additional units/year**
+• **15% reduction in antibiotic usage**
+  **10,000 animals × 15% baseline antibiotic usage rate × 15% reduction = 1,500 fewer antibiotic treatments/year**
 
 ### Success Metrics
-- Reduction in failed treatments
-- Maintenance cost savings
-- Maintenance downtime reduction
-- Time saved in manual summarization
+• Reduction in treatment failures
+• Decrease in veterinary costs
+• Increase in animal productivity
+• Reduction in antibiotic usage
 
 ### Risk Assessment
-Potential challenges include:
-- Data quality and consistency
-- Integration with existing systems
-- Training and adoption by field technicians
-
-Mitigation strategies:
-- Implement data quality checks and data cleansing processes
-- Conduct thorough system integration testing
-- Provide comprehensive training and support for field technicians
+Potential implementation challenges include data quality issues and the need for significant training data. Mitigation strategies include ensuring high-quality data sources and investing in data curation and annotation.
 
 ### Long-term Evolution
-Over the next 3-5 years, LogLynx will continue to evolve by incorporating more advanced NLP techniques, integrating with emerging technologies like IoT sensors, and expanding its capabilities to include predictive maintenance and real-time monitoring.'''
+In the next 3-5 years, Livestock Health Guardian will evolve to incorporate more advanced generative AI techniques, such as multimodal learning and transfer learning, to further improve its predictive capabilities and adapt to new data sources and farm management practices.
+
+---
+
+**'''
 
 # Display logo and title inline
 st.markdown(f'''
@@ -210,14 +208,14 @@ st.markdown(f'''
     <img src="https://i.imgur.com/Og6gFnB.png" width="100" style="margin-right:15px">
     <div>
         <h1 style="font-size:2.2rem; margin:0; padding:0">{solution_name_clean.replace('_', ' ').title()}</h1>
-        <p style="font-size:1.1rem; color:gray; margin:0; padding:0">Fivetran and Cortex-powered Streamlit in Snowflake data application for Oil & Gas</p>
+        <p style="font-size:1.1rem; color:gray; margin:0; padding:0">Fivetran and Cortex-powered Streamlit in Snowflake data application for Agriculture</p>
     </div>
 </div>
 ''', unsafe_allow_html=True)
 
 # Define available models as strings
 MODELS = [
-    "claude-4-sonnet", "claude-3-7-sonnet", "claude-3-5-sonnet", "llama3.1-8b", "llama3.1-70b", "llama4-maverick", "llama4-scout", "llama3.2-1b", "snowflake-llama-3.1-405b", "snowflake-llama-3.3-70b", "mistral-large2", "mistral-7b", "deepseek-r1", "snowflake-arctic", "reka-flash", "jamba-instruct", "gemma-7b"
+    "llama3.1-8b", "snowflake-llama-3.3-70b", "mistral-large2", "llama3.1-70b", "llama4-maverick", "llama4-scout", "claude-3-5-sonnet", "snowflake-llama3.1-405b", "deepseek-r1"
 ]
 
 if 'insights_history' not in st.session_state:
@@ -262,7 +260,7 @@ def generate_insights(data, focus_area, model_name):
     # Calculate basic statistics for numeric columns only - exclude ID columns
     numeric_stats = {}
     # Only include actual numeric metrics, not ID columns
-    key_metrics = ["failure_rate", "maintenance_cost", "downtime_hours", "summarization_time_saved"]
+    key_metrics = ["age", "weight", "temperature", "humidity", "precipitation", "predicted_health_risk"]
     
     # Filter to only columns that exist and are actually numeric
     available_metrics = []
@@ -293,7 +291,7 @@ def generate_insights(data, focus_area, model_name):
 
     # Get top values for categorical columns
     categorical_stats = {}
-    categorical_options = ["log_description", "maintenance_type", "maintenance_status", "summarized_log"]
+    categorical_options = ["species", "breed", "health_status", "vaccination_history", "medication_history", "weather_data", "recommended_action"]
     for cat_col in categorical_options:
         if cat_col in data.columns:
             try:
@@ -336,66 +334,66 @@ def generate_insights(data, focus_area, model_name):
     # Define specific instructions for each focus area
     focus_area_instructions = {
         "Overall Performance": """
-        For the Overall Performance analysis of LogLynx:
-        1. Provide a comprehensive analysis of the field technician log summarization system using failure rate, maintenance cost, downtime hours, and time saved metrics
-        2. Identify significant patterns in maintenance types, equipment performance, and technician efficiency across oil and gas operations
-        3. Highlight 3-5 key operational metrics that best indicate log summarization effectiveness (failure rate reduction, cost savings, downtime reduction)
-        4. Discuss both strengths and areas for improvement in the AI-powered log analysis process
-        5. Include 3-5 actionable insights for improving field operations based on the technician log data
+        For the Overall Performance analysis of Livestock Health Guardian:
+        1. Provide a comprehensive analysis of the livestock health monitoring system using animal health metrics, environmental conditions, and predictive health risk scores
+        2. Identify significant patterns in animal health status, vaccination coverage, and environmental factors across different species and breeds
+        3. Highlight 3-5 key livestock metrics that best indicate overall herd health and productivity (health status distribution, vaccination compliance, weight patterns, health risk predictions)
+        4. Discuss both strengths and areas for improvement in the AI-powered livestock health monitoring process
+        5. Include 3-5 actionable insights for improving farm operations and animal welfare based on the livestock data
         
-        Structure your response with these oil & gas focused sections:
-        - Field Operations Insights (5 specific insights with supporting technician and equipment data)
-        - Maintenance Performance Trends (3-4 significant trends in failure rates and downtime reduction)
-        - Operational Efficiency Recommendations (3-5 data-backed recommendations for improving field operations)
-        - Implementation Steps (3-5 concrete next steps for field technicians and maintenance managers)
+        Structure your response with these agriculture-focused sections:
+        - Livestock Health Insights (5 specific insights with supporting animal health and environmental data)
+        - Animal Welfare Performance Trends (3-4 significant trends in health status, vaccination rates, and risk predictions)
+        - Farm Management Recommendations (3-5 data-backed recommendations for improving livestock operations)
+        - Implementation Steps (3-5 concrete next steps for farm managers and veterinarians)
         """,
         
         "Optimization Opportunities": """
-        For the Optimization Opportunities analysis of LogLynx:
-        1. Focus specifically on areas where field technician log analysis and maintenance efficiency can be improved
-        2. Identify inefficiencies in maintenance scheduling, equipment downtime, and technician productivity across oil and gas operations
-        3. Analyze correlations between maintenance types, failure rates, and summarization time savings
-        4. Prioritize optimization opportunities based on potential impact on operational costs and equipment reliability
-        5. Suggest specific technical or process improvements for integration with existing CMMS and ERP systems
+        For the Optimization Opportunities analysis of Livestock Health Guardian:
+        1. Focus specifically on areas where livestock health monitoring and farm management efficiency can be improved
+        2. Identify inefficiencies in vaccination schedules, health interventions, and environmental management across different animal species and farms
+        3. Analyze correlations between environmental conditions, animal characteristics, and health risk predictions
+        4. Prioritize optimization opportunities based on potential impact on animal welfare, veterinary costs, and farm productivity
+        5. Suggest specific technical or process improvements for integration with existing farm management software and veterinary systems
         
-        Structure your response with these oil & gas focused sections:
-        - Field Operations Optimization Priorities (3-5 areas with highest cost and downtime reduction potential)
-        - Operational Impact Analysis (quantified benefits of addressing each opportunity in terms of maintenance metrics)
-        - CMMS Integration Strategy (specific steps for maintenance teams to implement each optimization)
-        - System Integration Recommendations (specific technical changes needed for seamless integration with SAP, Oracle, and IBM Maximo)
-        - Field Operations Risk Assessment (potential challenges for technicians and maintenance teams and how to mitigate them)
+        Structure your response with these agriculture-focused sections:
+        - Livestock Management Optimization Priorities (3-5 areas with highest potential for improving animal health and reducing costs)
+        - Health Intervention Impact Analysis (quantified benefits of addressing each opportunity in terms of animal welfare metrics)
+        - Farm Management Integration Strategy (specific steps for farm managers to implement each optimization)
+        - Veterinary System Integration Recommendations (specific technical changes needed for seamless integration with farm management software)
+        - Animal Welfare Risk Assessment (potential challenges for livestock health and farm operations and how to mitigate them)
         """,
         
         "Financial Impact": """
-        For the Financial Impact analysis of LogLynx:
-        1. Focus on cost-benefit analysis and ROI in oil and gas operations terms (maintenance cost vs. operational efficiency gains)
-        2. Quantify financial impacts through maintenance cost savings, downtime reduction, and productivity improvements
-        3. Identify cost savings opportunities across different maintenance types and equipment categories
-        4. Analyze resource allocation efficiency across different technicians and operational areas
-        5. Project future financial outcomes based on improved log summarization accuracy and expanding to predictive maintenance
+        For the Financial Impact analysis of Livestock Health Guardian:
+        1. Focus on cost-benefit analysis and ROI in agriculture terms (veterinary costs vs. animal productivity gains and disease prevention)
+        2. Quantify financial impacts through reduced veterinary expenses, improved animal productivity, and decreased treatment failures
+        3. Identify cost savings opportunities across different animal species, health interventions, and farm operations
+        4. Analyze resource allocation efficiency across different farms, veterinarians, and livestock management practices
+        5. Project future financial outcomes based on improved health prediction accuracy and expanding to preventive care
         
-        Structure your response with these oil & gas focused sections:
-        - Maintenance Cost Analysis (breakdown of maintenance costs and potential savings by equipment and maintenance type)
-        - Operational Efficiency Impact (how improved log summarization affects operational costs and throughput)
-        - Oil & Gas ROI Calculation (specific calculations showing return on investment in terms of maintenance cost reduction)
-        - Downtime Reduction Opportunities (specific areas to reduce equipment downtime and associated costs)
-        - Operations Cost Forecasting (projections based on improved maintenance efficiency metrics)
+        Structure your response with these agriculture-focused sections:
+        - Veterinary Cost Analysis (breakdown of veterinary expenses and potential savings by animal species and treatment type)
+        - Animal Productivity Impact (how improved health monitoring affects livestock productivity and farm revenue)
+        - Agriculture ROI Calculation (specific calculations showing return on investment in terms of reduced veterinary costs and improved productivity)
+        - Disease Prevention Opportunities (specific areas to reduce disease outbreaks and associated costs)
+        - Farm Economics Forecasting (projections based on improved animal health metrics and productivity)
         """,
         
         "Strategic Recommendations": """
-        For the Strategic Recommendations analysis of LogLynx:
-        1. Focus on long-term strategic implications for digital transformation in oil and gas operations
-        2. Identify competitive advantages against traditional manual log summarization approaches
-        3. Suggest new directions for AI integration with emerging oil and gas technologies (e.g., IoT sensors, predictive maintenance)
-        4. Connect recommendations to broader operational goals of reducing costs and improving equipment reliability
-        5. Provide a digital operations roadmap with prioritized initiatives
+        For the Strategic Recommendations analysis of Livestock Health Guardian:
+        1. Focus on long-term strategic implications for digital transformation in agriculture and livestock management
+        2. Identify competitive advantages against traditional manual livestock health monitoring approaches
+        3. Suggest new directions for AI integration with emerging agricultural technologies (e.g., IoT sensors, precision agriculture, automated feeding systems)
+        4. Connect recommendations to broader agricultural goals of sustainable farming, animal welfare improvement, and farm profitability
+        5. Provide a digital agriculture roadmap with prioritized initiatives
         
-        Structure your response with these oil & gas focused sections:
-        - Digital Operations Context (how LogLynx fits into broader digital transformation in oil and gas)
-        - Operational Competitive Advantage Analysis (how to maximize efficiency advantages compared to traditional manual processes)
-        - Field Technology Strategic Priorities (3-5 high-impact strategic initiatives for improving field operations)
-        - Advanced Technology Integration Vision (how to evolve LogLynx with IoT sensors and predictive maintenance over 1-3 years)
-        - Operations Transformation Roadmap (sequenced steps for expanding to real-time monitoring and predictive maintenance)
+        Structure your response with these agriculture-focused sections:
+        - Digital Agriculture Context (how Livestock Health Guardian fits into broader digital transformation in farming)
+        - Farm Management Competitive Advantage Analysis (how to maximize efficiency advantages compared to traditional manual monitoring)
+        - Agricultural Technology Strategic Priorities (3-5 high-impact strategic initiatives for improving livestock operations)
+        - Advanced Agricultural Technology Integration Vision (how to evolve with IoT sensors, precision agriculture, and automated systems over 1-3 years)
+        - Farm Operations Transformation Roadmap (sequenced steps for expanding to real-time monitoring and predictive veterinary care)
         """
     }
 
@@ -403,7 +401,7 @@ def generate_insights(data, focus_area, model_name):
     selected_focus_instructions = focus_area_instructions.get(focus_area, "")
 
     prompt = f'''
-    You are an expert data analyst specializing in {focus_area.lower()} analysis for oil and gas operations.
+    You are an expert data analyst specializing in {focus_area.lower()} analysis for agriculture and livestock operations.
 
     SOLUTION CONTEXT:
     {solution_name}
@@ -427,98 +425,100 @@ def generate_insights(data, focus_area, model_name):
     - Ensure your response is unique and tailored to this specific focus area
     - Include a mix of observations, analysis, and actionable recommendations
     - Use bullet points and clear section headers for readability
-    - Frame all insights in the context of oil and gas field operations and maintenance
+    - Frame all insights in the context of livestock health monitoring and farm management
     '''
 
     return call_cortex_model(prompt, model_name)
 
 def create_metrics_charts(data):
-    """Create metric visualizations for the oil and gas data"""
+    """Create metric visualizations for the agriculture data"""
     charts = []
     
-    # Maintenance Cost Distribution
-    if 'maintenance_cost' in data.columns:
-        cost_chart = alt.Chart(data).mark_bar().encode(
-            alt.X('maintenance_cost:Q', bin=alt.Bin(maxbins=20), title='Maintenance Cost ($)'),
-            alt.Y('count()', title='Number of Records'),
-            color=alt.value('#1f77b4')
+    # Animal Weight Distribution
+    if 'weight' in data.columns:
+        weight_chart = alt.Chart(data).mark_bar().encode(
+            alt.X('weight:Q', bin=alt.Bin(maxbins=20), title='Animal Weight (lbs)'),
+            alt.Y('count()', title='Number of Animals'),
+            color=alt.value('#2E8B57')
         ).properties(
-            title='Cost Distribution',
+            title='Weight Distribution',
             width=380,
             height=280
         )
-        charts.append(('Cost Distribution', cost_chart))
+        charts.append(('Weight Distribution', weight_chart))
     
-    # Failure Rate by Maintenance Type
-    if 'failure_rate' in data.columns and 'maintenance_type' in data.columns:
-        failure_chart = alt.Chart(data).mark_boxplot().encode(
-            alt.X('maintenance_type:N', title='Maintenance Type'),
-            alt.Y('failure_rate:Q', title='Failure Rate'),
-            color=alt.Color('maintenance_type:N', legend=None)
+    # Health Risk by Species
+    if 'predicted_health_risk' in data.columns and 'species' in data.columns:
+        risk_chart = alt.Chart(data).mark_boxplot().encode(
+            alt.X('species:N', title='Animal Species'),
+            alt.Y('predicted_health_risk:Q', title='Predicted Health Risk'),
+            color=alt.Color('species:N', legend=None)
         ).properties(
-            title='Failure Rate by Type',
+            title='Health Risk by Species',
             width=380,
             height=280
         )
-        charts.append(('Failure Rate by Type', failure_chart))
+        charts.append(('Health Risk by Species', risk_chart))
     
-    # Downtime Hours Trend
-    if 'downtime_hours' in data.columns and 'log_date' in data.columns:
-        downtime_chart = alt.Chart(data).mark_line(point=True).encode(
-            alt.X('log_date:T', title='Date'),
-            alt.Y('mean(downtime_hours):Q', title='Average Downtime Hours'),
-            color=alt.value('#ff7f0e')
+    # Environmental Temperature Trends
+    if 'temperature' in data.columns:
+        temp_chart = alt.Chart(data).mark_area(opacity=0.7).encode(
+            alt.X('temperature:Q', bin=alt.Bin(maxbins=15), title='Temperature (°F)'),
+            alt.Y('count()', title='Frequency'),
+            color=alt.value('#FF6B6B')
         ).properties(
-            title='Downtime Trends',
+            title='Temperature Distribution',
             width=380,
             height=280
         )
-        charts.append(('Downtime Trends', downtime_chart))
+        charts.append(('Temperature Distribution', temp_chart))
     
-    # Maintenance Status Distribution
-    if 'maintenance_status' in data.columns:
+    # Health Status Distribution
+    if 'health_status' in data.columns:
         status_chart = alt.Chart(data).mark_arc().encode(
             theta=alt.Theta('count():Q'),
-            color=alt.Color('maintenance_status:N', title='Status'),
-            tooltip=['maintenance_status:N', 'count():Q']
+            color=alt.Color('health_status:N', title='Health Status'),
+            tooltip=['health_status:N', 'count():Q']
         ).properties(
-            title='Status Distribution',
+            title='Health Status Distribution',
             width=380,
             height=280
         )
-        charts.append(('Status Distribution', status_chart))
+        charts.append(('Health Status Distribution', status_chart))
     
-    # Time Saved vs Maintenance Cost Correlation
-    if 'summarization_time_saved' in data.columns and 'maintenance_cost' in data.columns:
+    # Weight vs Health Risk Correlation
+    if 'weight' in data.columns and 'predicted_health_risk' in data.columns:
         correlation_chart = alt.Chart(data).mark_circle(size=80).encode(
-            alt.X('summarization_time_saved:Q', title='Time Saved (hours)'),
-            alt.Y('maintenance_cost:Q', title='Maintenance Cost ($)'),
-            color=alt.Color('failure_rate:Q', title='Failure Rate', scale=alt.Scale(scheme='viridis')),
-            tooltip=['summarization_time_saved:Q', 'maintenance_cost:Q', 'failure_rate:Q']
+            alt.X('weight:Q', title='Animal Weight (lbs)'),
+            alt.Y('predicted_health_risk:Q', title='Predicted Health Risk'),
+            color=alt.Color('age:Q', title='Age (years)', scale=alt.Scale(scheme='viridis')),
+            tooltip=['weight:Q', 'predicted_health_risk:Q', 'age:Q', 'species:N']
         ).properties(
-            title='Time Saved vs Cost',
+            title='Weight vs Health Risk',
             width=380,
             height=280
         )
-        charts.append(('Time Saved vs Cost', correlation_chart))
+        charts.append(('Weight vs Health Risk', correlation_chart))
     
-    # Equipment Performance Bar Chart
-    if 'equipment_id' in data.columns and 'failure_rate' in data.columns:
-        # Group by equipment and calculate average failure rate
-        equipment_data = data.groupby('equipment_id')['failure_rate'].mean().reset_index()
-        equipment_data = equipment_data.head(12).sort_values('failure_rate', ascending=False)  # Top 12 highest failure rates
+    # Vaccination Status by Breed
+    if 'vaccination_history' in data.columns and 'breed' in data.columns:
+        # Group by breed and vaccination status
+        vacc_data = data.groupby(['breed', 'vaccination_history']).size().reset_index(name='count')
+        # Limit to top 10 breeds by total count
+        top_breeds = data['breed'].value_counts().head(10).index
+        vacc_data_filtered = vacc_data[vacc_data['breed'].isin(top_breeds)]
         
-        equipment_chart = alt.Chart(equipment_data).mark_bar().encode(
-            alt.X('equipment_id:O', title='Equipment ID', sort='-y'),
-            alt.Y('failure_rate:Q', title='Average Failure Rate'),
-            color=alt.Color('failure_rate:Q', title='Failure Rate', scale=alt.Scale(scheme='reds')),
-            tooltip=['equipment_id:O', alt.Tooltip('failure_rate:Q', format='.3f')]
+        vacc_chart = alt.Chart(vacc_data_filtered).mark_bar().encode(
+            alt.X('breed:O', title='Breed', sort='-y'),
+            alt.Y('count:Q', title='Number of Animals'),
+            color=alt.Color('vaccination_history:N', title='Vaccination Status'),
+            tooltip=['breed:O', 'vaccination_history:N', 'count:Q']
         ).properties(
-            title='Equipment Performance',
+            title='Vaccination Status by Breed',
             width=380,
             height=280
         )
-        charts.append(('Equipment Performance', equipment_chart))
+        charts.append(('Vaccination Status by Breed', vacc_chart))
     
     return charts
 
@@ -527,9 +527,9 @@ if data.empty:
     st.error("No data found.")
     st.stop()
 
-categorical_cols = [col for col in ["log_description", "maintenance_type", "maintenance_status", "summarized_log"] if col in data.columns]
-numeric_cols = [col for col in ["technician_id", "equipment_id", "erp_order_id", "customer_id", "failure_rate", "maintenance_cost", "downtime_hours", "summarization_time_saved"] if col in data.columns]
-date_cols = [col for col in ["log_date", "created_at", "updated_at"] if col in data.columns]
+categorical_cols = [col for col in ["species", "breed", "health_status", "vaccination_history", "medication_history", "weather_data", "recommended_action"] if col in data.columns]
+numeric_cols = [col for col in ["age", "weight", "temperature", "humidity", "precipitation", "predicted_health_risk"] if col in data.columns]
+date_cols = [col for col in [] if col in data.columns]
 
 sample_cols = data.columns.tolist()
 numeric_candidates = [col for col in sample_cols if data[col].dtype in ['float64', 'int64'] and 'id' not in col.lower()]
@@ -539,7 +539,7 @@ cat_candidates = [col for col in sample_cols if data[col].dtype == 'object' and 
 # Four tabs - Metrics tab first, then AI Insights
 tabs = st.tabs(["📊 Metrics", "✨ AI Insights", "📁 Insights History", "🔍 Data Explorer"])
 
-# Metrics tab (now first)
+# Metrics tab (first)
 with tabs[0]:
     st.subheader("📊 Key Performance Metrics")
     
@@ -547,24 +547,24 @@ with tabs[0]:
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
-        if 'failure_rate' in data.columns:
-            avg_failure_rate = data['failure_rate'].mean()
-            st.metric("Avg Failure Rate", f"{avg_failure_rate:.3f}", delta=f"{(avg_failure_rate - 0.03)*100:.1f}% vs baseline")
+        if 'predicted_health_risk' in data.columns:
+            avg_risk = data['predicted_health_risk'].mean()
+            st.metric("Avg Health Risk", f"{avg_risk:.3f}", delta=f"{(avg_risk - 0.5)*100:.1f}% vs baseline")
     
     with col2:
-        if 'maintenance_cost' in data.columns:
-            avg_cost = data['maintenance_cost'].mean()
-            st.metric("Avg Maintenance Cost", f"${avg_cost:,.0f}", delta=f"-${(4000000/12 - avg_cost):,.0f} vs target")
+        if 'weight' in data.columns:
+            avg_weight = data['weight'].mean()
+            st.metric("Avg Animal Weight", f"{avg_weight:,.0f} lbs", delta=f"{(avg_weight - 1500):,.0f} vs target")
     
     with col3:
-        if 'downtime_hours' in data.columns:
-            avg_downtime = data['downtime_hours'].mean()
-            st.metric("Avg Downtime Hours", f"{avg_downtime:.1f}h", delta=f"{(avg_downtime - 8.33):.1f}h vs target")
+        if 'age' in data.columns:
+            avg_age = data['age'].mean()
+            st.metric("Avg Animal Age", f"{avg_age:.1f} years", delta=f"{(avg_age - 6):.1f} vs target")
     
     with col4:
-        if 'summarization_time_saved' in data.columns:
-            avg_time_saved = data['summarization_time_saved'].mean()
-            st.metric("Avg Time Saved", f"{avg_time_saved:.1f}h", delta=f"{(avg_time_saved - 2.5):.1f}h vs baseline")
+        if 'temperature' in data.columns:
+            avg_temp = data['temperature'].mean()
+            st.metric("Avg Temperature", f"{avg_temp:.1f}°F", delta=f"{(avg_temp - 70):.1f}°F vs optimal")
     
     st.markdown("---")
     
@@ -574,7 +574,7 @@ with tabs[0]:
     if charts:
         st.subheader("📈 Performance Visualizations")
         
-        # Display charts in a 2-column grid, ensuring all 6 charts are shown
+        # Display charts in a 2-column grid, ensuring all charts are shown
         num_charts = len(charts)
         for i in range(0, num_charts, 2):
             cols = st.columns(2)
@@ -608,53 +608,51 @@ with tabs[0]:
         # Add meaningful column names and formatting
         summary_df.columns = ['Count', 'Mean', 'Std Dev', 'Min', '25%', '50% (Median)', '75%', 'Max']
         
-        # Format specific columns for better readability
-        format_dict = {}
-        for col in summary_df.index:
-            if 'cost' in col.lower():
-                format_dict[col] = "${:,.2f}"
-            elif 'rate' in col.lower():
-                format_dict[col] = "{:.3f}"
-            elif 'hours' in col.lower() or 'time' in col.lower():
-                format_dict[col] = "{:.1f}h"
-            else:
-                format_dict[col] = "{:.2f}"
-        
-        # Create three columns for better organization
+        # Create two columns for better organization
         col1, col2 = st.columns(2)
         
         with col1:
-            st.markdown("**🎯 Key Performance Metrics**")
-            key_metrics = ['failure_rate', 'maintenance_cost', 'downtime_hours', 'summarization_time_saved']
+            st.markdown("**🎯 Key Livestock Metrics**")
+            key_metrics = ['age', 'weight', 'temperature', 'humidity', 'precipitation', 'predicted_health_risk']
             key_metrics_present = [m for m in key_metrics if m in summary_df.index]
             
             if key_metrics_present:
-                key_stats_df = summary_df.loc[key_metrics_present]
-                
                 # Create a more readable format
-                for metric in key_stats_df.index:
-                    mean_val = key_stats_df.loc[metric, 'Mean']
-                    min_val = key_stats_df.loc[metric, 'Min']
-                    max_val = key_stats_df.loc[metric, 'Max']
+                for metric in key_metrics_present:
+                    mean_val = summary_df.loc[metric, 'Mean']
+                    min_val = summary_df.loc[metric, 'Min']
+                    max_val = summary_df.loc[metric, 'Max']
                     
                     # Format based on metric type
-                    if 'cost' in metric.lower():
+                    if 'weight' in metric.lower():
                         st.metric(
                             label=metric.replace('_', ' ').title(),
-                            value=f"${mean_val:,.0f}",
-                            help=f"Range: ${min_val:,.0f} - ${max_val:,.0f}"
+                            value=f"{mean_val:,.0f} lbs",
+                            help=f"Range: {min_val:,.0f} - {max_val:,.0f} lbs"
                         )
-                    elif 'rate' in metric.lower():
+                    elif 'risk' in metric.lower():
                         st.metric(
                             label=metric.replace('_', ' ').title(),
                             value=f"{mean_val:.3f}",
                             help=f"Range: {min_val:.3f} - {max_val:.3f}"
                         )
-                    elif 'hours' in metric.lower() or 'time' in metric.lower():
+                    elif 'temperature' in metric.lower():
                         st.metric(
                             label=metric.replace('_', ' ').title(),
-                            value=f"{mean_val:.1f}h",
-                            help=f"Range: {min_val:.1f}h - {max_val:.1f}h"
+                            value=f"{mean_val:.1f}°F",
+                            help=f"Range: {min_val:.1f}°F - {max_val:.1f}°F"
+                        )
+                    elif 'humidity' in metric.lower() or 'precipitation' in metric.lower():
+                        st.metric(
+                            label=metric.replace('_', ' ').title(),
+                            value=f"{mean_val:.1f}%",
+                            help=f"Range: {min_val:.1f}% - {max_val:.1f}%"
+                        )
+                    elif 'age' in metric.lower():
+                        st.metric(
+                            label=metric.replace('_', ' ').title(),
+                            value=f"{mean_val:.1f} years",
+                            help=f"Range: {min_val:.1f} - {max_val:.1f} years"
                         )
                     else:
                         st.metric(
@@ -669,32 +667,35 @@ with tabs[0]:
             # Calculate and display key insights
             insights = []
             
-            if 'failure_rate' in summary_df.index:
-                fr_mean = summary_df.loc['failure_rate', 'Mean']
-                fr_std = summary_df.loc['failure_rate', 'Std Dev']
-                insights.append(f"• **Failure Rate Variability**: {fr_std:.3f} (σ)")
+            if 'predicted_health_risk' in summary_df.index:
+                hr_mean = summary_df.loc['predicted_health_risk', 'Mean']
+                hr_std = summary_df.loc['predicted_health_risk', 'Std Dev']
+                insights.append(f"• **Health Risk Variability**: {hr_std:.3f} (σ)")
                 
-                if fr_mean > 0.5:
-                    insights.append(f"• **High failure rate detected** (>{fr_mean:.1%})")
+                if hr_mean > 0.5:
+                    insights.append(f"• **⚠️ Elevated health risk** ({hr_mean:.1%})")
                 else:
-                    insights.append(f"• **Acceptable failure rate** ({fr_mean:.1%})")
+                    insights.append(f"• **Good health status** ({hr_mean:.1%} avg risk)")
             
-            if 'maintenance_cost' in summary_df.index:
-                mc_q75 = summary_df.loc['maintenance_cost', '75%']
-                mc_q25 = summary_df.loc['maintenance_cost', '25%']
-                iqr = mc_q75 - mc_q25
-                insights.append(f"• **Cost IQR**: ${iqr:,.0f}")
+            if 'weight' in summary_df.index:
+                wt_q75 = summary_df.loc['weight', '75%']
+                wt_q25 = summary_df.loc['weight', '25%']
+                iqr = wt_q75 - wt_q25
+                insights.append(f"• **Weight IQR**: {iqr:,.0f} lbs")
             
-            if 'downtime_hours' in summary_df.index:
-                dt_median = summary_df.loc['downtime_hours', '50% (Median)']
-                dt_max = summary_df.loc['downtime_hours', 'Max']
-                insights.append(f"• **Median Downtime**: {dt_median:.1f}h")
-                if dt_max > 10:
-                    insights.append(f"• **⚠️ High downtime events**: up to {dt_max:.1f}h")
+            if 'age' in summary_df.index:
+                age_median = summary_df.loc['age', '50% (Median)']
+                age_max = summary_df.loc['age', 'Max']
+                insights.append(f"• **Median Age**: {age_median:.1f} years")
+                if age_max > 10:
+                    insights.append(f"• **Mature animals present**: up to {age_max:.1f} years")
             
-            if 'summarization_time_saved' in summary_df.index:
-                ts_mean = summary_df.loc['summarization_time_saved', 'Mean']
-                insights.append(f"• **Avg Time Saved**: {ts_mean:.1f}h per log")
+            if 'temperature' in summary_df.index:
+                temp_mean = summary_df.loc['temperature', 'Mean']
+                temp_std = summary_df.loc['temperature', 'Std Dev']
+                insights.append(f"• **Avg Environmental Temp**: {temp_mean:.1f}°F")
+                if temp_std > 15:
+                    insights.append(f"• **Variable conditions** (σ = {temp_std:.1f}°F)")
             
             for insight in insights:
                 st.markdown(insight)
@@ -715,7 +716,7 @@ with tabs[0]:
                 use_container_width=True
             )
 
-# AI Insights tab (now second)
+# AI Insights tab (second)
 with tabs[1]:
     st.subheader("✨ AI-Powered Insights")
     focus_area = st.radio("Focus Area", [
@@ -735,23 +736,24 @@ with tabs[1]:
                 st.session_state.insights_history.append({
                     "timestamp": timestamp,
                     "focus": focus_area,
+                    "model": selected_model,
                     "insights": insights
                 })
                 st.download_button("Download Insights", insights, file_name=f"{solution_name.replace(' ', '_').lower()}_insights.md")
             else:
                 st.error("No insights returned.")
 
-# Insights History tab (now third)
+# Insights History tab
 with tabs[2]:
     st.subheader("📁 Insights History")
     if st.session_state.insights_history:
         for i, item in enumerate(reversed(st.session_state.insights_history)):
-            with st.expander(f"{item['timestamp']} - {item['focus']}", expanded=False):
+            with st.expander(f"{item['timestamp']} - {item['focus']} ({item['model']})", expanded=False):
                 st.markdown(item["insights"])
     else:
         st.info("No insights generated yet. Go to the AI Insights tab to generate some insights.")
 
-# Data Explorer tab (now fourth)
+# Data Explorer tab (fourth)
 with tabs[3]:
     st.subheader("🔍 Data Explorer")
     rows_per_page = st.slider("Rows per page", 5, 50, 10)
@@ -770,37 +772,37 @@ with tabs[3]:
 3. Click on **Streamlit**
 4. Click the **+ Streamlit App** blue button in the upper right corner
 5. Configure your app:
-   - App title: `LogLynx`
+   - App title: `Livestock Health Guardian`
    - Database: Select `SF_LABUSER#_DB` (only option available for your user)
-   - Schema: Select `oil_gas_fts_connector` the schema created by your Fivetran connector (this should be the only schema available other than Public - do not select Public)
+   - Schema: Select `agriculture_agr_connector` the schema created by your Fivetran connector (this should be the only schema available other than Public - do not select Public)
 6. In the Streamlit Editor that appears (left side of the Streamlit UI), select all text (Command+A) and delete it
 7. Paste the copied Streamlit application code into the empty editor (Command+V):
 8. Click the blue **Run** button in the upper right corner
 9. Close the editor by clicking the middle icon in the bottom left navigation
 
 ## 3.3 Explore the Streamlit in Snowflake Gen AI Data App
-The LogLynx data app should now be running with the following sections:
-- **Metrics**: View failure rates, maintenance costs, downtime hours, and time savings metrics with operational visualizations
-- **AI Insights**: Generate AI-powered analysis of the oil and gas field operations data across four focus areas
-- **Insights History**: Access previously generated AI insights
-- **Data Explorer**: Browse the underlying field technician and maintenance data
+The Livestock Health Guardian data app should now be running with the following sections:
+- **Metrics**: View animal health metrics, predicted health risks, vaccination compliance, and environmental conditions with livestock performance visualizations
+- **AI Insights**: Generate AI-powered analysis of the agricultural animal health monitoring data across four focus areas (Overall Performance, Optimization Opportunities, Financial Impact, Strategic Recommendations)
+- **Insights History**: Access previously generated AI insights for livestock health analysis
+- **Data Explorer**: Browse the underlying animal health records, farm data, and environmental monitoring information
 
 ## Done!
 You've successfully:
 1. Created a custom Fivetran connector using the Fivetran Connector SDK
-2. Deployed the connector to sync oil and gas field technician summarization data into Snowflake
+2. Deployed the connector to sync agriculture livestock health monitoring data into Snowflake
 3. Built a Streamlit in Snowflake data app to visualize and analyze the data using Snowflake Cortex
 
 ## Next Steps
 Consider how you might adapt this solution for your own use:
-- Integration with field operations systems like SAP, Oracle, or Microsoft Dynamics
-- Adding real-time equipment monitoring from CMMS systems like IBM Maximo or Infor EAM
-- Implementing machine learning models for more sophisticated predictive maintenance algorithms
-- Customizing the Streamlit app for specific oil and gas operational processes
+- Integration with livestock management systems like AgriWebb, CattleMax, or VetSuccess by Henry Schein
+- Adding real-time animal monitoring from IoT sensors, weather stations, and precision agriculture platforms like Climate FieldView or AgSense
+- Implementing machine learning models for more sophisticated health risk prediction and disease outbreak prevention algorithms
+- Customizing the Streamlit app for specific livestock species, farm management processes, and veterinary workflow integration
 
 ## Resources
 - Fivetran Connector SDK Documentation: [https://fivetran.com/docs/connectors/connector-sdk](https://fivetran.com/docs/connectors/connector-sdk)  
 - Fivetran Connector SDK Examples: [https://fivetran.com/docs/connector-sdk/examples](https://fivetran.com/docs/connector-sdk/examples)
-- API Connector Reference: [https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/fts_api_spec](https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/fts_api_spec)
+- API Connector Reference: [https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/agr_api_spec](https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/agr_api_spec)
 - Snowflake Cortex Documentation: [https://docs.snowflake.com/en/user-guide/snowflake-cortex/llm-functions](https://docs.snowflake.com/en/user-guide/snowflake-cortex/llm-functions)
 - Snowflake Streamlit Documentation: [https://docs.snowflake.com/en/developer-guide/streamlit/about-streamlit](https://docs.snowflake.com/en/developer-guide/streamlit/about-streamlit)

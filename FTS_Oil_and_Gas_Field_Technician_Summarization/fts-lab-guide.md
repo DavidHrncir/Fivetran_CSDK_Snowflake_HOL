@@ -1,38 +1,24 @@
-# Fivetran Connector SDK Hands on Lab at Snowflake Summit 2025: Oil and Gas Field Technician Summarization
+# Fivetran Connector SDK Hands on Lab with Snowflake 2025: Oil and Gas Field Technician Summarization
 
 ## Overview
-In this 20-minute hands on lab, you'll build a **custom Fivetran connector** using the **Fivetran Connector SDK** and the **Anthropic Workbench** to integrate oil and gas field technician summarization data from a custom REST API into Snowflake. You'll then create a **Streamlit in Snowflake** application powering oil and gas metrics and **Snowflake Cortex AI-driven** field technician task summarization and optimization applications.
+In this hands on lab, you'll build a **custom Fivetran connector** using the **Fivetran Connector SDK** and the **LLM service of your choice** to integrate this vertical's data from a custom REST API into Snowflake. You'll then create a **Streamlit (in Snowflake)** application with various tools and dashboards powering this vertical's metrics which includes a **Snowflake Cortex AI-driven** feature to drive even deeper analytics, descriptive, and prescriptive insights.
 
 The Oil and Gas FTS custom connector should fetch field technician records from a REST API and load them into a single table called `fts_records` in your Snowflake database. The connector should deliver detailed information about field operations, maintenance activities, and technician log summarization for oil and gas operations, including properties like failure rates, maintenance costs, downtime hours, and summarization time savings. It should handle authentication, pagination, error handling, and maintain state between sync runs using a cursor-based approach.
 
 ## Lab Steps Quick Access
 
-- [Step 1: Create a Custom Connector with the Fivetran Connector SDK (8 minutes)](#step-1-create-a-custom-connector-with-the-fivetran-connector-sdk-8-minutes)
-- [Step 2: Start Data Sync in Fivetran (3 minutes)](#step-2-start-data-sync-in-fivetran-3-minutes)
-- [Step 3: Create a Streamlit in Snowflake Gen AI Data App (5 minutes)](#step-3-create-a-streamlit-in-snowflake-gen-ai-data-app-5-minutes)
+- [Step 1: Create a Custom Connector with the Fivetran Connector SDK](#step-1-create-a-custom-connector-with-the-fivetran-connector-sdk)
+- [Step 2: Start Data Sync in Fivetran](#step-2-start-data-sync-in-fivetran)
+- [Step 3: Create a Streamlit in Snowflake Gen AI Data App](#step-3-create-a-streamlit-in-snowflake-gen-ai-data-app)
 
 ## Lab Environment
-- MacBook Pro laptop with Chrome browser, VS Code, DBeaver and the Fivetran Connector SDK
-- 6 Chrome tabs are pre-configured (leave them open throughout the lab):
+- Machine with Python 3.9 - 3.12 loaded and ready with an environment pre-created
+- Chrome browser or equivalent
+- Browser tabs (leave them open throughout the lab):
   - Tab 1: GitHub Lab Repo: Lab Guide
-  - Tab 2: Anthropic Workbench: AI Code Generation Assistant (Claude)
-  - Tab 3: Fivetran: Automated Data Movement Platform
-  - Tab 4: Snowflake: Data and AI Platform including Cortex (AI functions) and Streamlit (data apps)
-  - Tab 5: Fivetran Connector SDK Examples Open Source Github Repository
-  - Tab 6: Fivetran Connector SDK Docs
-
-## Mac Keyboard Shortcuts Reference
-- **Command+A**: Select all
-- **Command+C**: Copy
-- **Command+V**: Paste
-- **Command+S**: Save
-- **Command+Tab**: Switch between applications
-- **Control+`**: Open terminal in VS Code
-
-## Trackpad/MousePad Reference
-- **Single finger tap**: Left click
-- **Two finger tap**: Right click
-- **Two finger slide**: Scroll up and down
+  - Tab 2: [Fivetran: Automated Data Movement Platform](https://www.fivetran.com/login)
+  - Tab 3: [Snowflake: Data and AI Platform](https://aa67604.us-central1.gcp.snowflakecomputing.com/console/login#/)
+  - Tab 4: [Fivetran Connector SDK Docs](https://fivetran.com/docs/connector-sdk)
 
 ## Step 1: Create a Custom Connector with the Fivetran Connector SDK (8 minutes)
 

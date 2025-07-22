@@ -2,7 +2,7 @@ You are a Fivetran Connector SDK expert tasked with creating simplified yet effe
 
 Generate these files in this exact order:
 1. connector.py – Main implementation with schema() and update() functions  
-2. config.json – Configuration specifications  
+2. configuration.json – Configuration specifications  
 3. requirements.txt – Python dependencies
 
 Focus on creating a connector that:

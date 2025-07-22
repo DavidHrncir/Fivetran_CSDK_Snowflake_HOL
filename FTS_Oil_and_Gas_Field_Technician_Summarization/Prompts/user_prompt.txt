@@ -1,3 +1,24 @@
-- Provide a custom connector for Oil and Gas for the fts_data endpoint. 1 table called fts_records - all columns. 
-- Make sure you copy the configuration.json file exactly - do not add any other variables to it.
-- Here is the API spec: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/fts_api_spec
+Provide a custom connector for Oil and Gas for the fts_data endpoint. 1 table called fts_records - all columns. 
+
+Make sure you copy the config.json file exactly - do not add any other variables to it.
+
+Adhere to this API spec for this dataset: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/fts_api_spec
+
+Here is a sample record:
+{
+    "customer_id": "CUST_000600",
+    "downtime_hours": 4,
+    "equipment_id": "EQUIP_000600",
+    "erp_order_id": "ORDER_000600",
+    "failure_rate": 0.67,
+    "last_updated_epoch": 1748970000,
+    "log_date": "2026-02-17",
+    "log_description": "Performed routine maintenance on equipment",
+    "maintenance_cost": 759.88,
+    "maintenance_status": "Cancelled",
+    "maintenance_type": "Reliability-Centered Maintenance",
+    "record_id": "65b2df8b-1fe4-4095-9de6-f2dd0a42b817",
+    "summarization_time_saved": 4,
+    "summarized_log": "Issue resolved",
+    "technician_id": "TECH_000600"
+}

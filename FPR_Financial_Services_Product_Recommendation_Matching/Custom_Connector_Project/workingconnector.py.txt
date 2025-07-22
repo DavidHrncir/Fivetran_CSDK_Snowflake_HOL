@@ -1,31 +1,10 @@
-You are a Fivetran Connector SDK expert tasked with creating simplified yet effective custom connectors that follow best practices. Your goal is to create a production-ready connector with minimal code that will work perfectly on the first attempt.
+import requests
+import time
+from fivetran_connector_sdk import Connector
+from fivetran_connector_sdk import Operations as op
+from fivetran_connector_sdk import Logging as log
 
-Generate these files in this exact order:
-1. connector.py – Main implementation with schema() and update() functions  
-2. config.json – Configuration specifications  
-3. requirements.txt – Python dependencies
 
-Focus on creating a connector that:
-1. Only defines tables and primary keys in the schema() function, letting Fivetran infer all column types automatically
-2. Never specifies column definitions or data types in the schema
-3. Retrieves all fields from the API without explicitly listing them
-4. Implements proper pagination based on the cursor and possibly has more flag
-5. Uses proper checkpoint operations for incremental syncs
-6. Handles configuration safely using .get() with defaults
-7. Includes appropriate error handling and logging
-
-Critical Requirements for Error-Free Connectors
-1. Use .get() with defaults for all configuration access required as per the api spec. Items to include are things like api key, base url, and page size.  Validate these values in the schema() function.
-
-2. Save all cursor info from the api to state.
-
-3. Ensure stable primary key identification - Verify primary keys are always present in API responses  
-
-4. Always implement checkpoints for incremental syncs - Save checkpoint after every batch is processed.
-
-5. Ensure the 200 response is checked for the dataset name to replace the my_records references in the below example.
-
-Example schema() Function
 def schema(configuration: dict):
     """Define the minimal table schema for Fivetran"""
     # Validate configuration
@@ -33,44 +12,47 @@ def schema(configuration: dict):
     if not api_key:
         log.severe("API key is missing from configuration")
         return []
-
+    
+    base_url = configuration.get('base_url')
+    if not base_url:
+        log.severe("Base URL is missing from configuration")
+        return []
+    
     # Return minimal schema with ONLY table name and primary key
     return [
         {
-            "table": "records",
+            "table": "fpr_records",
             "primary_key": ["record_id"]
         }
-        # Add additional tables as needed
     ]
 
-Example update() Function
 
 def update(configuration: dict, state: dict):
-    """Extract data from the endpoint and yield operations"""
+    """Extract data from the FPR endpoint and yield operations"""
     
-    # Validate configuration.
+    # Validate configuration
     api_key = configuration.get('api_key')
     if not api_key:
         log.severe("API key is missing from configuration")
         return
     
-    base_url = configuration.get('base_url')
+    base_url = configuration.get('base_url', 'https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com')
     if not base_url:
         log.severe("Base URL is missing from configuration")
         return
     
     page_size = int(configuration.get('page_size', '100'))
     
-    # Add the x-api-key to the session headers.
+    # Add the x-api-key to the session headers
     headers = {"x-api-key": api_key}
     session = requests.Session()
     session.headers.update(headers)
     
-    # Retrieve the state for change data capture.
+    # Retrieve the state for change data capture
     next_cursor = state.get('next_cursor')
     
-    # Set up the parameters for the API request.
-    url = f"{base_url}/fts_data"
+    # Set up the parameters for the API request
+    url = f"{base_url}/fpr_data"
     params = {"page_size": page_size}
     if next_cursor:
         params["cursor"] = next_cursor
@@ -79,10 +61,13 @@ def update(configuration: dict, state: dict):
         log.info("Starting initial sync")
     
     record_count = 0
-    has_more = True    
+    has_more = True
+    iteration_count = 0
     
     try:
-        while has_more:
+        while has_more and iteration_count < 200:
+            iteration_count += 1
+            
             try:
                 # Make API request with retry logic
                 for attempt in range(3):
@@ -98,12 +83,12 @@ def update(configuration: dict, state: dict):
                 
                 data = response.json()
                 
-                # Process records.
-                records = data.get("my_records", [])
+                # Process records - the API returns 'fpr_records' array
+                records = data.get("fpr_records", [])
                 for record in records:
                     # Ensure the record has an ID
                     if 'record_id' in record:
-                        yield op.upsert("my_records", record)
+                        yield op.upsert("fpr_records", record)
                         record_count += 1
                     else:
                         log.warning(f"Skipping record without ID: {record}")
@@ -111,7 +96,7 @@ def update(configuration: dict, state: dict):
                 # Update pagination info
                 next_cursor = data.get("next_cursor")
                 has_more = data.get("has_more", False)
-
+                
                 # Checkpoint every pagination batch
                 yield op.checkpoint({"next_cursor": next_cursor})
                 log.info(f"Checkpoint at {record_count} records, cursor: {next_cursor}")
@@ -139,6 +124,11 @@ def update(configuration: dict, state: dict):
                 log.severe(f"Unexpected error processing response: {str(e)}")
                 break
         
+        # Check if we hit the iteration limit
+        if iteration_count >= 200:
+            yield op.checkpoint({"next_cursor": next_cursor})
+            log.info(f"Reached maximum iterations (200). Processed {record_count} records. Sync will continue on next run.")
+        
         # Final checkpoint
         if next_cursor:
             yield op.checkpoint({"next_cursor": next_cursor})
@@ -149,17 +139,10 @@ def update(configuration: dict, state: dict):
     except Exception as e:
         log.severe(f"Unexpected error in update function: {str(e)}")
 
-Configuration & Safety Best Practices
 
-1. Always use .get() for accessing configuration keys in config.json.  The config.json should contain only key-value pairs of what the connector needs for processing and accessing the API with defaulted values if available.
-2. Log clearly and consistently at appropriate levels.
-3. Implement rate limiting/backoff if needed>
+# Initialize the connector
+connector = Connector(update=update, schema=schema)
 
-Python Packages
-Only list the packages required in the requirements.txt file.  Do not list "fivetran_connector_sdk" or "requests" as these packages are pre-installed.
-
-API-Specific Validations
-1. Authentication - Follow API documentation (header, query parameter, etc.)
-2. Pagination - Use next_cursor or equivalent from response along with has_more to signal when another call is needed.
-3. Rate Limiting - Use retry/backoff mechanisms if needed.  Do not allow more than 200 iterations. If 200 is hit, save the checkpoint again and exit with a friendly message.
-4. Error Handling - Catch and log API-specific error codes
+# Start the connector
+if __name__ == "__main__":
+    connector.start()

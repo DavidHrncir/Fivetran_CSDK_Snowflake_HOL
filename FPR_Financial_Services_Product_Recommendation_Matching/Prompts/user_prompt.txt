@@ -1,3 +1,38 @@
-- Provide a custom connector for Financial Services for the fpr_data endpoint. 1 table called fpr_records - all columns. 
-- Make sure you copy the configuration.json file exactly - do not add any other variables to it.
-- Here is the API spec: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/fpr_api_spec
+Provide a custom connector for Financial Services for the fpr_data endpoint. 1 table called fpr_records - all columns.
+
+Make sure you copy the config.json file exactly - do not add any other variables to it.
+
+Adhere to this API spec for this dataset: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/fpr_api_spec
+
+Here is a sample record:
+{
+    "account_balance": 38079.4717658889,
+    "customer_churn_probability": 0.7825001444,
+    "customer_email": "customer1@example.com",
+    "customer_id": "CUST_000000",
+    "customer_lifecycle_stage": "Inactive",
+    "customer_lifecycle_stage_transition_date": "2024-07-27",
+    "customer_name": "Customer 1",
+    "customer_product_affinity": 0.4964611524,
+    "customer_product_affinity_trend": "Product Affinity Trend 1",
+    "customer_product_interests": "Product Interest 1",
+    "customer_product_usage": "Product Usage 1",
+    "customer_product_usage_trend": "Product Usage Trend 1",
+    "customer_satisfaction_score": 0.2465199056,
+    "customer_segment": "Commercial",
+    "customer_transaction_count": 48,
+    "customer_transaction_value": 1257.2906030128,
+    "last_updated_epoch": 1748797200,
+    "product_id": "PROD_000000",
+    "product_name": "Product 1",
+    "product_recommendation": "Insurance",
+    "product_recommendation_date": "2024-09-12",
+    "product_recommendation_status": "Accepted",
+    "product_sales_amount": 6152.2323619448,
+    "product_sales_date": "2025-03-24",
+    "product_terms": "No Collateral Required",
+    "product_type": "Savings Account",
+    "recommendation_score": 0.2741640377,
+    "record_id": "23f99867-3171-4769-9ca3-36edeac4f0ac",
+    "transaction_history": "Transaction History 1"
+}

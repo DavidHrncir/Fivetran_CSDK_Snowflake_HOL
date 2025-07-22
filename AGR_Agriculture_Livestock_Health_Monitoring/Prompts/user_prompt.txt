@@ -1,3 +1,26 @@
-- Provide a custom connector for Agriculture for the agr_data endpoint. 1 table called agr_records - all columns. 
-- Make sure you copy the configuration.json file exactly - do not add any other variables to it.
-- Here is the API spec: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/agr_api_spec
+Provide a custom connector for Agriculture for the agr_data endpoint. 1 table called agr_records - all columns.
+
+Make sure you copy the config.json file exactly - do not add any other variables to it.
+
+Adhere to this API spec for this dataset: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/agr_api_spec
+
+Here is a sample record:
+{
+    "age": 5,
+    "animal_id": "ANIMAL_000000",
+    "breed": "Brahman",
+    "farm_id": "FARM_000000",
+    "health_status": "Healthy",
+    "humidity": 68.71,
+    "last_updated_epoch": 1748797200,
+    "medication_history": "Previous",
+    "precipitation": 97.32,
+    "predicted_health_risk": 0.87,
+    "recommended_action": "Monitor closely",
+    "record_id": "42e76305-0fdf-44a6-aa5a-f5c767086027",
+    "species": "Beef Cattle",
+    "temperature": 8.15,
+    "vaccination_history": "Overdue",
+    "weather_data": "Snowy",
+    "weight": 1338.71
+}

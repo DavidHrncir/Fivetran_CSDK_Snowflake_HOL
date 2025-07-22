@@ -1,3 +1,38 @@
-- Provide a custom connector for CPG for the cpg_data endpoint. 1 table called cpg_records - all columns. 
-- Make sure you copy the configuration.json file exactly - do not add any other variables to it.
-- Here is the API spec: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/cpg_api_spec
+Provide a custom connector for CPG for the cpg_data endpoint. 1 table called cpg_records - all columns. 
+
+Make sure you copy the config.json file exactly - do not add any other variables to it.
+
+Adhere to this API spec for this dataset: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/cpg_api_spec
+
+Here is a sample record:
+{
+    "average_order_value": 295.83,
+    "customer_id": "CUSTOMER_000000",
+    "customer_ltv": 4404.31,
+    "customer_satisfaction_rate": 0.7399786595,
+    "customer_segment": "Medium-Value",
+    "demand_forecast": 14,
+    "inventory_level": 294,
+    "inventory_turnover": 6.7420788752,
+    "last_updated_epoch": 1748797200,
+    "order_date": "2024-09-01",
+    "order_frequency": 2,
+    "order_id": "ORDER_000000",
+    "order_status": "Shipped",
+    "order_total": 495.47,
+    "overstock_rate": 0.0470208128,
+    "price_elasticity": 0.9547121322,
+    "price_optimization_date": "2024-11-17",
+    "price_optimization_flag": false,
+    "price_optimization_recommendation": "Increase Price",
+    "price_optimization_result": "Failure",
+    "product_category": "Beauty",
+    "product_id": "PRODUCT_000000",
+    "product_price": 996.06,
+    "product_rating": 1.1266253446,
+    "product_review_count": 74,
+    "product_subcategory": "Laptops",
+    "record_id": "2f06d249-1391-4079-8726-7d2862911ff4",
+    "revenue_growth_rate": 0.0353156353,
+    "stockout_rate": 0.0793451208
+}

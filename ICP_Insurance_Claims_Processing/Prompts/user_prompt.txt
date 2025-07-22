@@ -1,3 +1,43 @@
-- Provide a custom connector for Insurance for the icp_data endpoint. 1 table called icp_records - all columns. 
-- Make sure you copy the configuration.json file exactly - do not add any other variables to it.
-- Here is the API spec: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/icp_api_spec
+Provide a custom connector for Insurance for the icp_data endpoint. 1 table called icp_records - all columns.
+
+Make sure you copy the config.json file exactly - do not add any other variables to it.
+
+Adhere to this API spec for this dataset: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/icp_api_spec
+
+Here is a sample record:
+{
+    "claim_amount": 38079.4717658889,
+    "claim_category": "Vandalism",
+    "claim_date": "2024-10-17",
+    "claim_description": "Vandalism",
+    "claim_id": "CLAIM_000000",
+    "claim_outcome": "Denied",
+    "claim_outcome_confidence": 0.6791716995,
+    "claim_outcome_date": "2024-07-05",
+    "claim_outcome_probability": 0.5032204149,
+    "claim_processing_duration": 39,
+    "claim_processing_end_date": "2024-10-31",
+    "claim_processing_error": false,
+    "claim_processing_error_reduction": 21.6135812311,
+    "claim_processing_notes": "Notes 0",
+    "claim_processing_start_date": "2024-08-20",
+    "claim_processing_time": 12.5729060301,
+    "claim_processing_time_reduction": 7.2574798045,
+    "claim_status": "Reopened",
+    "claim_status_history": "Status 0",
+    "claim_subcategory": "Lightning",
+    "claim_type": "Flood",
+    "customer_email": "customer0@example.com",
+    "customer_id": "CUSTOMER_000000",
+    "customer_interaction_history": "Interaction 0",
+    "customer_name": "Customer 0",
+    "customer_satisfaction_rating": 2,
+    "customer_satisfaction_rating_improvement": 5,
+    "customer_segment": "Commercial",
+    "last_updated_epoch": 1748797200,
+    "operational_cost": 2836.7727367756,
+    "operational_cost_reduction": 4935.091826606,
+    "policy_effective_date": "2024-10-09",
+    "policy_id": "POLICY_000000",
+    "record_id": "e4fd12be-10f1-4306-8a21-3abe5a9ddb36"
+}

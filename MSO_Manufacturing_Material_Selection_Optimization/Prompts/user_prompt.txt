@@ -1,3 +1,41 @@
-- Provide a custom connector for Manufacturing for the mso_data endpoint. 1 table called mso_records - all columns. 
-- Make sure you copy the configuration.json file exactly - do not add any other variables to it.
-- Here is the API spec: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/mso_api_spec
+Provide a custom connector for Manufacturing for the mso_data endpoint. 1 table called mso_records - all columns.
+
+Make sure you copy the config.json file exactly - do not add any other variables to it.
+
+Adhere to this API spec for this dataset: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/mso_api_spec
+
+Here is a sample record:
+{
+    "cad_file_name": "File 1.dwg",
+    "cad_system": "Autodesk Inventor",
+    "cost_savings": 527.3108956424,
+    "density": 4.058131129,
+    "designer_experience": 12,
+    "designer_id": "DES_0000",
+    "designer_name": "Designer 1",
+    "designer_skill_level": "Intermediate",
+    "last_updated_epoch": 1748797200,
+    "material_cost": 102.9187119751,
+    "material_id": "MTRL_0000",
+    "material_name": "Material 1",
+    "material_optimization_date": "2024-04-29",
+    "material_optimization_recommendation": "Recommended",
+    "material_optimization_score": 0.9039157259,
+    "material_selection_date": "2024-04-28",
+    "material_selection_recommendation": "Recommended",
+    "material_selection_score": 0.9335058035,
+    "material_waste": 6.0330629414,
+    "material_weight": 67.5975964267,
+    "performance_improvement": 94.8842301476,
+    "poissons_ratio": 0.3076327141,
+    "product_description": "Description of Product 1",
+    "product_id": "PRD_0000",
+    "product_lifecycle_stage": "Production",
+    "product_lifecycle_status": "Active",
+    "product_name": "Product 1",
+    "product_performance": 900.7847057252,
+    "record_id": "22eea48a-60c3-41ed-96be-34352d4c10b9",
+    "waste_reduction": 5.9535572251,
+    "weight_reduction": 12.6936057674,
+    "youngs_modulus": 12572.906030128
+}

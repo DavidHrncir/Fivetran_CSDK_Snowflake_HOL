@@ -1,3 +1,41 @@
-- Provide a custom connector for Healthcare for the cds_data endpoint. 1 table called cds_records - all columns.  
-- Make sure you copy the configuration.json file exactly - do not add any other variables to it.
-- Here is the API spec: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/cds_api_spec
+Provide a custom connector for Healthcare for the cds_data endpoint. 1 table called cds_records - all columns. 
+
+Make sure you copy the config.json file exactly - do not add any other variables to it.
+
+Adhere to this API spec for this dataset: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/cds_api_spec
+
+Here is a sample record:
+{
+    "allergies": "Life-Threatening",
+    "clinical_trial_id": "Trial_000000",
+    "cost_of_care": 54931.53,
+    "current_medications": "Atorvastatin",
+    "diagnosis": "Asthma",
+    "family_medical_history": "Stroke",
+    "genetic_data": "None",
+    "lab_results": "Life-Threatening",
+    "last_updated_epoch": 1748797200,
+    "length_of_stay": 41,
+    "medical_conditions": "Heart Disease",
+    "medical_error_rate": 0.74,
+    "medical_history": "Heart Disease",
+    "medical_publication_id": "Publication_000000",
+    "medication_adherence": "Non-Adherent",
+    "medication_cost": 9453.1,
+    "medication_recommendation": "Ibuprofen",
+    "medication_side_effects": "Severe",
+    "patient_id": "Patient_000000",
+    "patient_outcome_score": 0.1,
+    "patient_satisfaction": "Satisfied",
+    "publication_date": "2024-11-19",
+    "publication_title": "Publication 1",
+    "readmission_risk": 0.02,
+    "record_id": "a0d9d670-1bdc-434e-8ef4-39eafec4907f",
+    "total_cost_savings": 36727.2,
+    "treatment_outcome": "Ongoing",
+    "treatment_plan": "Surgery",
+    "treatment_recommendation": "Lifestyle Changes",
+    "trial_name": "Trial 2",
+    "trial_status": "Enrolling",
+    "vital_signs": "Life-Threatening"
+}

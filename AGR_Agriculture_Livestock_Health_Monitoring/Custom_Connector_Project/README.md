@@ -22,9 +22,11 @@ The Agriculture Animal Health connector fetches livestock health and environment
 ```
 agriculture/
 ├── configuration.json     # Configuration parameters for the connector
-├── connector.py           # Main connector implementation
-├── debug_and_reset.sh     # Script for testing and resetting the connector
-├── deploy.sh              # Script for deploying the connector to Fivetran
+├── connector.py           # Main connector implementation (blank by default)
+├── setenv.ps1             # (for Windows) Script to set the environment in the terminal
+├── setenv.sh              # (for Mac) Script to set the environment in the terminal
+├── agr.env                # The file containing the environment variables for the above 'setenv' scripts above (blank by default)
+├── workingconnectorpy.txt # A working copy of the the connector.py file for this vertical
 └── requirements.txt       # Python dependencies (if any)
 ```
 

@@ -1,8 +1,6 @@
+Here is the API spec for this dataset: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/fts_api_spec
+
 Provide a custom connector for Oil and Gas for the fts_data endpoint. 1 table called fts_records - all columns. 
-
-Make sure you copy the config.json file exactly - do not add any other variables to it.
-
-Adhere to this API spec for this dataset: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/fts_api_spec
 
 Here is a sample record:
 {

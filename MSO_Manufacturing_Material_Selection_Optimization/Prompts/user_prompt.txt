@@ -1,8 +1,6 @@
+Here is the API spec for this dataset: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/mso_api_spec
+
 Provide a custom connector for Manufacturing for the mso_data endpoint. 1 table called mso_records - all columns.
-
-Make sure you copy the config.json file exactly - do not add any other variables to it.
-
-Adhere to this API spec for this dataset: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/mso_api_spec
 
 Here is a sample record:
 {

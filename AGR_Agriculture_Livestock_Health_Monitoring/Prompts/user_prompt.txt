@@ -1,8 +1,6 @@
-Provide a custom connector for Agriculture for the agr_data endpoint. 1 table called agr_records - all columns.
+Here is the API spec for this dataset: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/agr_api_spec
 
-Make sure you copy the config.json file exactly - do not add any other variables to it.
-
-Adhere to this API spec for this dataset: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/agr_api_spec
+Provide a custom Fivetran connector for Agriculture for the agr_data endpoint. There is only one dataset called agr_records.
 
 Here is a sample record:
 {

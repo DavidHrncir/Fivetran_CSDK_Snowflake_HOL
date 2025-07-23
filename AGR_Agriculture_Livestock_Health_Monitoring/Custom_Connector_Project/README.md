@@ -23,8 +23,8 @@ The Agriculture Animal Health connector fetches livestock health and environment
 agriculture/
 ├── configuration.json     # Configuration parameters for the connector
 ├── connector.py           # Main connector implementation (blank by default)
-├── setenv.ps1             # (for Windows) Script to set the environment in the terminal
-├── setenv.sh              # (for Mac) Script to set the environment in the terminal
+├── setenv.bat             # (for Windows) Script to set the environment in the CMD terminal
+├── setenv.sh              # (for Mac) Script to set the environment in the zsh terminal
 ├── agr.env                # The file containing the environment variables for the above 'setenv' scripts above (blank by default)
 ├── workingconnectorpy.txt # A working copy of the the connector.py file for this vertical
 └── requirements.txt       # Python dependencies (if any)
@@ -83,6 +83,7 @@ The Agriculture API returns animal health records with the following structure:
 | `precipitation`                    | float   | Precipitation amount                          |
 | `predicted_health_risk`            | float   | AI-predicted health risk score (0.0-1.0)     |
 | `recommended_action`               | string  | Recommended care action (Monitor closely, Administer medication, etc.) |
+| `last_updated_epoch`               | number  | Epoch value for the last updated date in epoch form |
 
 ## Implementation Details
 
@@ -119,126 +120,36 @@ The connector uses this workflow to efficiently process large datasets while mai
 
 ### Prerequisites
 
-1. Python 3.7+ installed
-2. The Fivetran Connector SDK installed:
+1. Python 3.9+ installed
+2. Python environment created and activated in the terminal
+3. The Fivetran Connector SDK installed:
    ```bash
    pip install fivetran-connector-sdk
    ```
-3. DuckDB command-line tool (optional, for viewing debug output)
-4. Basic understanding of the Fivetran platform
+4. DuckDB command-line tool (optional, for viewing debug output)
+5. Basic understanding of the Fivetran platform
 
-### Local Development and Testing
+### Local Development Setup
 
-1. Clone or create the project directory:
-   ```bash
-   mkdir agriculture && cd agriculture
-   ```
+1. Create the project directory:
+On a Windows or Mac, create the `agriculture` folder in a folder that does not reside under a system folder such as "My Documents"
 
-2. Create the required files:
+2. Download the required files from the git repo:
+   - `agr.env`: Environment variables loading file
    - `configuration.json`: Configure your API credentials and settings
    - `connector.py`: Implement the connector using the Fivetran SDK
-   - `debug_and_reset.sh`: Script for testing
-   - `deploy.sh`: Script for deployment
+   - `requirements.txt`: Python requirements file
+   - `setenv.bat`: (Windows only; cmd terminal) script to set environment variables
+   - `setenv.sh`: (Mac only; zsh terminal) script to set environment variables
+   - Once the above files are downloaded copy/move them to the newly created `agriculture` folder
 
-3. Make the scripts executable and run the debug script:
+3. Make the scripts executable (Mac only):
    ```bash
-   chmod +x debug_and_reset.sh
-   ./debug_and_reset.sh
+   chmod +x setenv.sh
    ```
 
-   This will:
-   - Reset the connector state
-   - Run the connector in debug mode
-   - Display sample data from the extracted records
-   - Show operation statistics
-
 ### Debug Script Details
-
-The `debug_and_reset.sh` script includes the following steps:
-
-1. **Validation**: Checks for required files and extracts the table name
-2. **Reset**: Clears previous state and data using `fivetran reset`
-3. **Debug**: Runs the connector in debug mode with the specified configuration
-4. **Query**: Executes a sample query against the extracted data using DuckDB
-5. **Summary**: Displays a summary of operations performed (upserts, checkpoints, etc.)
-
-When you run the debug script, you'll see output similar to the following:
-
-```
-✓ Detected table name: agr_records
-===========================================================
-         Fivetran Connector Debug & Reset Script          
-===========================================================
-
-This will reset your connector, delete current state and warehouse.db files.
-Do you want to continue? (Y/n): y
-
-Step 1: Resetting Fivetran connector...
-✓ Reset successful
-
-Step 2: Running debug with configuration...
-(Real-time output will be displayed below)
-
-May 17, 2025 10:01:09 AM INFO Fivetran-Connector-SDK: Debugging connector at: /path/to/connector
-May 17, 2025 10:01:09 AM INFO Fivetran-Connector-SDK: Running connector tester...
-May 17, 2025 10:01:12 AM INFO Fivetran-Connector-SDK: Initiating the 'schema' method call...
-May 17, 2025 10:01:12 AM: INFO Fivetran-Tester-Process: [SchemaChange]: tester.agr_records 
-May 17, 2025 10:01:12 AM INFO Fivetran-Connector-SDK: Initiating the 'update' method call...
-
-May 17, 2025 10:01:12 AM INFO: Fetching data with params: {'page_size': 100}
-May 17, 2025 10:01:12 AM INFO: Checkpoint saved after 100 records
-May 17, 2025 10:01:12 AM INFO: Fetching data with params: {'page_size': 100, 'cursor': '41b3cba91ddab1541cf48828361b7f1c'}
-...
-May 17, 2025 10:01:12 AM INFO: Checkpoint saved after 700 records
-May 17, 2025 10:01:12 AM INFO: Fetching data with params: {'page_size': 100, 'cursor': '0d011521148b3f11f4f4ec315800cf40'}
-May 17, 2025 10:01:12 AM INFO: No more pages to fetch
-
-✓ Debug completed
-
-Step 3: Querying sample data from DuckDB...
-Running query: SELECT * FROM tester.agr_records LIMIT 5;
-
-┌──────────────────────┬─────────────────┬──────────────────────┬──────────────────┬───┬──────────────┬───────────────┬─────────────┐
-│      record_id       │ farm_id         │ animal_id            │ species          │ … │ health_status │ predicted_health_risk │ recommended_action │
-├──────────────────────┼─────────────────┼──────────────────────┼──────────────────┼───┼───────────────┼───────────────────────┼────────────────────┤
-│ 42e76305-0fdf-44a6…  │ FARM_000000     │ ANIMAL_000000        │ Beef Cattle      │ … │ Healthy       │ 0.87                  │ Monitor closely    │
-│ 11c55de5-44cf-4d7c…  │ FARM_000000     │ ANIMAL_000001        │ Beef Cattle      │ … │ Deceased      │ 0.18                  │ No action required │
-│ 1d2dfc75-1224-4057…  │ FARM_000000     │ ANIMAL_000002        │ Beef Cattle      │ … │ Healthy       │ 0.17                  │ No action required │
-│ bafc9f34-a011-4a08…  │ FARM_000000     │ ANIMAL_000003        │ Beef Cattle      │ … │ Sick          │ 0.51                  │ No action required │
-│ d42435be-82c2-4bc4…  │ FARM_000000     │ ANIMAL_000004        │ Beef Cattle      │ … │ Sick          │ 0.27                  │ No action required │
-└──────────────────────┴─────────────────┴──────────────────────┴──────────────────┴───┴──────────────┴───────────────┴─────────────┘
-
-==================== OPERATION SUMMARY ====================
-  Operation       | Calls     
-  ----------------+------------
-  Upserts         | 750       
-  Updates         | 0         
-  Deletes         | 0         
-  Truncates       | 0         
-  SchemaChanges   | 1         
-  Checkpoints     | 7         
-====================================================================
-
-✓ Debug and reset operations completed.
-Next sync state: {"next_cursor": "0d011521148b3f11f4f4ec315800cf40"}
-```
-
-In this output, you can observe:
-
-1. **Initial Setup**: The script detects the table name automatically from your connector code
-2. **Reset Process**: Confirms reset was successful after user confirmation
-3. **Debug Logging**: Detailed logs of the SDK initializing and making method calls
-4. **Data Fetching**: Shows each API request with pagination parameters:
-   - Starting with no cursor (first page)
-   - Continuing with cursors for subsequent pages
-   - Creating checkpoints after every 100 records
-   - Terminating when no more pages are available
-5. **Sample Data**: Displays the first 5 records from the extracted dataset to verify content
-6. **Operation Summary**: Shows that 750 records were processed through:
-   - 750 upsert operations
-   - 1 schema change
-   - 7 checkpoint operations (one per page of 100 records)
-7. **Final State**: The cursor value that will be used in the next sync to retrieve only new records
+This requires the following files to be loaded.
 
 ### Deploying to Fivetran
 

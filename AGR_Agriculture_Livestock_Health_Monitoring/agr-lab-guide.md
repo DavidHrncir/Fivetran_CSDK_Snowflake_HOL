@@ -68,14 +68,14 @@ On your second GitHub browser tab, click on the **Prompts** subfolder. (The exam
 pip install fivetran-connector-sdk
 ```
 
-3. Let's debug our code.  In the terminal by running the following commands. **fivetran reset** tells your local SDK system that all files and temporary databases should be reset for a brand new run. **fivetran debug** tells your local SDK system that it should mimic locally what Fivetran would be doing in Fivetran's environment.  You will notice that you must pass in the **--configuration configuration.json** parameter for the debug command since you could be testing multiple types of configurations during a development/testing cycle.
+3. Let's debug our code in the terminal by running the following commands. **fivetran reset** tells your local SDK system that all files and temporary databases should be reset for a brand new run. **fivetran debug** tells your local SDK system that it should mimic locally what Fivetran would be doing in Fivetran's environment.  You will notice that you must pass in the **--configuration configuration.json** parameter for the debug command since you could be testing multiple types of configurations during a development/testing cycle.
 ```bash
 fivetran reset
 fivetran debug --configuration configuration.json
 ```
 ***PAUSE: Let's analyze what is happening behind the scenes.***
 
-4. Once debug completes, you are able to open a tool like dBeaver and open the DuckDB and inspect the contents.  **Ensure you disconnect** the tool from the database when done since most tools will lock the database while open.
+4. Once debug completes, you are able to open a tool like dBeaver and open the DuckDB in the projects **files** folder and inspect the contents.  **Ensure you disconnect** the tool from the database when done since most tools will lock the database while open.
 
 5. If you let the code run to the end, you should see a statement that 600 rows were replicated/upserted.
 
@@ -92,11 +92,10 @@ You should receive a message stating the connection was deployed successfully al
 
 1. Switch to the Fivetran tab in your browser.
 2. Ensure you are in the **Connections** page and refresh the page to find your newly created connection.  If you enter your initials in the search, it should filter directly to your connection.
-3. Click on the connection to open the **Status** page
-4. Click the **Start Initial Sync** button
+3. Click on the connection to open the **Status** page.
+4. Click the **Start Initial Sync** button.
 5. You should see a status message indicating that the sync is **Active** and that it is the first time syncing data for this connection.
-6. Once your sync completes, you will see a message "Next sync will run in x hours" and if you click on the **1 HOUR** selection on the right side, you will see some sync metrics.
-    * You may need to refresh the UI to see updated sync progress and logs in the UI. 
+6. Once your sync completes, you will see a message "Next sync will run in x hours" and if you click on the **1 HOUR** selection on the right side, you will see some sync metrics.  <ins>You may need to refresh the UI to see updated sync progress and logs in the UI. </ins>
 7. Once your sync completes, you will see a message "Next sync will run in x hours" and if you click on the **1 HOUR** selection on the right side, you will see some sync metrics.
 
 ***PAUSE: Recap.***
@@ -104,7 +103,7 @@ You should receive a message stating the connection was deployed successfully al
 ## Step 4: Create a Streamlit Application in Snowflake
 
 ### 4.1 Copy the Streamlit Data App Code
-Open the **Streamlit_App** folder in this git repo into a new tab preferably.  Here you have two options.
+Open the **Streamlit_App** folder in this git repo on the other GitHub browser tab.  Here you have two options.
 
 **<ins>Option 1:</ins>** Click the **app.py** file and click the copy icon in the upper right.
 

@@ -52,6 +52,7 @@ The connector uses the following REST API endpoint to access agricultural animal
 
 - `cursor`: The cursor for the next page of results (used for pagination)
 - `page_size`: The number of records to return per page (1-200, defaults to 100)
+- `has_more`: The return flag along with the cursor describes whether or not a callback is needed (boolean)
 
 ### Authentication
 
@@ -118,134 +119,26 @@ The connector uses this workflow to efficiently process large datasets while mai
 
 ## Setup and Usage
 
-### Prerequisites
-
-1. Python 3.9+ installed
-2. Python environment created and activated in the terminal
-3. The Fivetran Connector SDK installed:
-   ```bash
-   pip install fivetran-connector-sdk
-   ```
-4. DuckDB command-line tool (optional, for viewing debug output)
-5. Basic understanding of the Fivetran platform
-
 ### Local Development Setup
 
 1. Create the project directory:
 On a Windows or Mac, create the `agriculture` folder in a folder that does not reside under a system folder such as "My Documents"
 
 2. Download the required files from the git repo:
-   - `agr.env`: Environment variables loading file
+   - `agr.env`: Environment variables loading file used for environment scripts
+   - `agr_alt.env`: Environment variables list that can manually be run in a terminal
    - `configuration.json`: Configure your API credentials and settings
    - `connector.py`: Implement the connector using the Fivetran SDK
    - `requirements.txt`: Python requirements file
    - `setenv.bat`: (Windows only; cmd terminal) script to set environment variables
    - `setenv.sh`: (Mac only; zsh terminal) script to set environment variables
+   - `workingconnectorpy.txt`: A working copy of the connector code
    - Once the above files are downloaded copy/move them to the newly created `agriculture` folder
 
 3. Make the scripts executable (Mac only):
    ```bash
    chmod +x setenv.sh
    ```
-
-### Debug Script Details
-This requires the following files to be loaded.
-
-### Deploying to Fivetran
-
-1. Ensure you have a Fivetran account and destination configured
-
-2. Make the deploy script executable and run it:
-   ```bash
-   chmod +x deploy.sh
-   ./deploy.sh
-   ```
-
-3. When prompted, enter:
-   - Your Fivetran account name (default: MDS_SNOWFLAKE_HOL)
-   - Your Fivetran destination name (default: NEW_SALES_ENG_HANDS_ON_LAB)
-   - A unique name for your connector (e.g., agr_0714)
-
-4. The script will package and upload your connector to Fivetran
-
-### Deploy Script Details
-
-The `deploy.sh` script performs the following actions:
-
-1. **Configuration Check**: Validates that the necessary configuration files are present
-2. **Account Information**: Prompts for Fivetran account details and retrieves API key
-3. **Deployment**: Packages and uploads the connector to your Fivetran account
-4. **Confirmation**: Displays the connector ID and a link to access it in the Fivetran dashboard
-
-Sample output from a successful deployment:
-```
-Enter your Fivetran Account Name [MDS_SNOWFLAKE_HOL]: 
-Enter your Fivetran Destination Name [NEW_SALES_ENG_HANDS_ON_LAB]: 
-Enter a unique Fivetran Connector Name [my_new_fivetran_custom_connector]: agr_0714
-Deploying connector...
-Jul 14, 2025 08:03:21 AM INFO Fivetran-Connector-SDK: Packaging your project for upload... 
-✓
-Jul 14, 2025 08:03:21 AM INFO Fivetran-Connector-SDK: Uploading your project... 
-✓
-Jul 14, 2025 08:03:24 AM INFO Fivetran-Connector-SDK: The connection 'agr_0714' has been created successfully.
-Jul 14, 2025 08:03:24 AM INFO Fivetran-Connector-SDK: Python version 3.12 to be used at runtime. 
-Jul 14, 2025 08:03:24 AM INFO Fivetran-Connector-SDK: Connection ID: academic_calyx 
-Jul 14, 2025 08:03:24 AM INFO Fivetran-Connector-SDK: Visit the Fivetran dashboard to start the initial sync: https://fivetran.com/dashboard/connectors/academic_calyx/status
-```
-
-### What to Expect After Deployment
-
-After successful deployment:
-
-1. The connector will be created in your Fivetran account with a randomly generated Connection ID (e.g., `academic_calyx`)
-2. You'll be provided a link to access the connector in the Fivetran dashboard
-3. The connector will be ready for its initial sync
-
-In the Fivetran dashboard, you will be able to:
-- View your connector's sync status
-- Configure sync frequency (hourly, daily, etc.)
-- Monitor for any errors or warnings
-- View the destination schema with the `agr_records` table in Snowflake
-- Track the data volume and record count
-- Configure schema and field mapping if needed
-
-The first sync will extract all available data, while subsequent syncs will be incremental, only fetching new or changed records based on the stored cursor position.
-
-## Maintenance and Troubleshooting
-
-### Common Issues
-
-- **API Key Issues**: Ensure your API key is valid and has the correct permissions
-- **Network Connectivity**: Check that your network can reach the Agriculture API endpoint
-- **Schema Changes**: If the API changes its schema, you may need to update the connector
-- **Cursor Issues**: If the cursor becomes invalid, reset the connector to perform a full sync
-- **Memory Limitations**: For very large datasets, consider decreasing the page size
-
-### Monitoring
-
-- Check the Fivetran dashboard for sync status and errors
-- Review logs in the Fivetran dashboard for detailed error information
-- Use the debug script locally to test changes before deployment
-- Monitor the timestamps of the most recent records to ensure data freshness
-
-### Debug and Reset
-
-If you encounter issues with the connector, you can use the debug_and_reset.sh script to:
-
-1. Reset the connector state (start fresh)
-2. Run in debug mode to see detailed logs
-3. Inspect the sample data to verify correct data extraction
-4. Check operation statistics to ensure proper functioning
-
-The script outputs detailed information that can help diagnose issues:
-- API request parameters and response details
-- Error messages and stack traces
-- Operation counts (upserts, updates, deletes, etc.)
-- Checkpoint state information
-
-## Advanced Customization
-
-To extend or modify this connector:
 
 ### Adding New Fields
 
@@ -263,7 +156,7 @@ To extend or modify this connector:
 
 ### Supporting Multiple Tables
 
-1. Update the schema function to define additional tables:
+1. Update the schema function to define additional tables (requires SDK testing API to be updated first):
    ```python
    def schema(configuration: dict):
        return [
@@ -333,19 +226,6 @@ To extend or modify this connector:
    for health_analytic in animal_health_analytics.values():
        yield op.upsert("animal_health_analytics", health_analytic)
    ```
-
-### Dependencies Management
-
-To add external dependencies:
-
-1. Create a `requirements.txt` file in your project directory
-2. Add your dependencies, for example:
-   ```
-   requests>=2.25.0
-   python-dateutil>=2.8.1
-   pandas>=1.3.0
-   ```
-3. The Fivetran deployment process will automatically install these dependencies in the connector environment
 
 ## Downstream Applications
 

@@ -14,10 +14,13 @@ The Agriculture AGR custom connector should fetch livestock health records from 
 
 ## Web Locations
 - Browser tabs (leave them open throughout the lab):
-  - Tab 1: GitHub Lab Repo: This Lab Guide
-  - Tab 2: [Fivetran: Automated Data Movement Platform](https://www.fivetran.com/login)
-  - Tab 3: [Snowflake: Data and AI Platform](https://aa67604.us-central1.gcp.snowflakecomputing.com/console/login#/)
-  - Tab 4: [Fivetran Connector SDK Docs](https://fivetran.com/docs/connector-sdk)
+  - Tab 1: GitHub Lab Repo: This Lab Guide (stays on lab guide)
+  - Tab 2: GitHub Lab Repo: This Lab Guide (expands folders and opens files) 
+  - Tab 3: [Fivetran: Automated Data Movement Platform](https://www.fivetran.com/login)
+  - Tab 4: [Snowflake: Data and AI Platform](https://aa67604.us-central1.gcp.snowflakecomputing.com/console/login#/)
+  - Tab 5: [Fivetran Connector SDK Docs](https://fivetran.com/docs/connector-sdk)
+
+***PAUSE: Let's quickly walk through the GitHub interface.***
 
 ## Step 1: Set up the Development Environment
 1. Create the project directory. On a Windows or Mac, create the **agriculture** folder in a folder that does not reside under a system folder such as "My Documents".
@@ -38,20 +41,20 @@ The Agriculture AGR custom connector should fetch livestock health records from 
    chmod +x setenv.sh
    ```
 4. Set up our environment variables.
-   - Edit the **agr.env** file.  Note that these values will become environment variables set by running one of the script files noted above.  In the event the script does not work on your machine, you may alter the **agr_alt.env** file to contain the values needed, and then copy and paste the commands into the terminal and run them.  If these environment variables are not present, you will be prompted to enter them manually during debugging and deployment.  Note that in the **agr.env** file you downloaded, **FIVETRAN_CONFIGURATION** and **FIVETRAN_PYTHON_VERSION** are already set.  We need to update the first 3 values now.
-   - For the **FIVETRAN_API_KEY**, we need to be in our Fivetran UI, then click your name in the lower left nav panel, then click API Key, and click Generate New API Key.  Copy the base64 encoded key that is created, and place it directly after the **FIVETRAN_API_KEY=** in the agr.env file. Ensure there are no spaces before or after the "=".  If you make a mistake, you can generate a new key as it will overwrite the previous one.
-   - For the **FIVETRAN_DESTINATION_NAME**, the instructor will place the value in the webinar chat area.  Copy and paste from there.
-   - For the **FIVETRAN_CONNECTION_NAME**, this must be all lower case letters, numbers, and underscores.  Since we are sharing a common environment, the connection names must be unique.  An option that works well here is, your initials followed by your birth month and day followed by agr.  Example: **dh0816agr** This value will be the connector name in Fivetran as well as the schema name in Snowflake.
-   - Once all 3 values are entered, save the file.
-   - In the terminal window, ensure you are in the folder that contains the project files.  Run the script as noted below:
-      - For Windows:
-      ```bash
-      call setenv.bat agr.env
-      ```
-      - For Mac:
-      ```bash
-      source ./setenv.sh agr.env
-      ```
+   - Edit the **agr_manual.env** file.  These values will become environment variables in your current terminal session (meaning if you close the terminal by accident, you will need to re-apply these environment variables). NOTE: If these environment variables are not present, you will be prompted to enter them manually during debugging and deployment (added complexity).  Note that in the **FIVETRAN_CONFIGURATION** and **FIVETRAN_PYTHON_VERSION** are already set.  We need to update the first 3 values now.
+   - **FIVETRAN_API_KEY**: We need to be in our Fivetran UI, then click your name in the lower left nav panel, then click API Key, and click Generate New API Key.  Copy the ***base64 encoded key***, remove the default text including the brackets and paste that value. If you make a mistake, you can generate a new key as it will overwrite the previous one.
+   - **FIVETRAN_DESTINATION_NAME**:  The instructor will place the value in the webinar chat area.  Copy and paste from there.
+   - **FIVETRAN_CONNECTION_NAME**: This must be all lower case letters, numbers, and underscores.  Since we are sharing a common environment, the <ins>connection names must be unique</ins>.  An option that works well here is, your initials followed by your birth month and day followed by agr.  Example: **dh0816agr** This value will be the connector name in Fivetran as well as the schema name in Snowflake.
+5. Once all 3 values are entered, save the file.
+6. Copy all 5 values from the agr_manual.env file and paste them into your terminal and press enter/return.
+   - To view/verify the values are applied in Windows:
+   ```bash
+   set
+   ```
+   - To view/verify the values are applied in Mac:
+   ```bash
+   env
+   ```
 
 ## Step 2: Create a Custom Fivetran Connector
 
@@ -107,9 +110,15 @@ You should receive a message stating the connection was deployed successfully al
 ## Step 4: Create a Streamlit Application in Snowflake
 
 ### 4.1 Copy the Streamlit Data App Code
-Open the **Streamlit_App** folder in this git repo into a new tab preferably.  Copy the Streamlit code using the copy icon in the upper right.
+Open the **Streamlit_App** folder in this git repo into a new tab preferably.  Here you have two options.
 
-## 4.2 Create and Deploy the Streamlit in Snowflake Gen AI Data App
+**<ins>Option 1:</ins>** Click the **app.py** file and click the copy icon in the upper right.
+
+or
+
+**<ins>Option 2:</ins>** Click the **app-agent.py** file and click the copy icon in the upper right. (This option is the same as the one above except there is a little more interaction with the AI processes of Cortex.)
+
+### 4.2 Create and Deploy the Streamlit in Snowflake Gen AI Data App
 1. Switch to the Snowflake tab in your browser.
 2. Click on **Projects** in the left navigation panel.
 3. Click on **Streamlit**.
@@ -124,7 +133,7 @@ Open the **Streamlit_App** folder in this git repo into a new tab preferably.  C
 9. Click the blue **Run** button in the upper right corner.
 10. Close the editor by clicking the middle icon in the bottom left navigation.
 
-## 4.3 Explore the Streamlit in Snowflake Gen AI Data App
+### 4.3 Explore the Streamlit in Snowflake Gen AI Data App
 The Livestock Health Guardian data app should now be running with the following sections:
 - **Metrics**: View animal health metrics, predicted health risks, vaccination compliance, and environmental conditions with livestock performance visualizations
 - **AI Insights**: Generate AI-powered analysis of the agricultural animal health monitoring data across four focus areas (Overall Performance, Optimization Opportunities, Financial Impact, Strategic Recommendations)

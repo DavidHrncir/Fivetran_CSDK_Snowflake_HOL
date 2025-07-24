@@ -23,6 +23,7 @@ The Agriculture Animal Health connector fetches livestock health and environment
 agriculture/
 ├── configuration.json     # Configuration parameters for the connector
 ├── connector.py           # Main connector implementation (blank by default)
+├── agr_manual.env         # The file containing the environment variables to be set, copied, and run in the OS's terminal
 ├── setenv.bat             # (for Windows) Script to set the environment in the CMD terminal
 ├── setenv.sh              # (for Mac) Script to set the environment in the zsh terminal
 ├── agr.env                # The file containing the environment variables for the above 'setenv' scripts above (blank by default)

@@ -26,27 +26,20 @@ The Agriculture AGR custom connector should fetch livestock health records from 
 1. Create the project directory. On a Windows or Mac, create the **agriculture** folder in a folder that does not reside under a system folder such as "My Documents".
 
 2. Download the project files from the git repo (easiest way):
-   - **agr.env**: Environment variables loading file
+   - **agr_manual.env**: Environment variables loading file
    - **configuration.json**: Configure your API credentials and settings
    - **connector.py**: Implement the connector using the Fivetran SDK
    - **requirements.txt**: Python requirements file
-   - **setenv.bat**: (Windows only; cmd terminal) script to set environment variables
-   - **setenv.sh**: (Mac only; zsh terminal) script to set environment variables
-   - Once the above files are downloaded copy/move them to the newly created **agriculture** folder
-   - Open this folder in your development IDE or in a terminal window
-   - **Activate your Python environment in your terminal window**
+3. Once the above files are downloaded copy/move them to the newly created **agriculture** folder
+4. Open this folder in your development IDE or in a terminal window
+5. **Activate your Python environment in your terminal window**
 
-3. Make the macOS script runnable (Mac only):
-   ```bash
-   chmod +x setenv.sh
-   ```
-4. Set up our environment variables.
+6. Set up our environment variables.
    - Edit the **agr_manual.env** file.  These values will become environment variables in your current terminal session (meaning if you close the terminal by accident, you will need to re-apply these environment variables). NOTE: If these environment variables are not present, you will be prompted to enter them manually during debugging and deployment (added complexity).  Note that in the **FIVETRAN_CONFIGURATION** and **FIVETRAN_PYTHON_VERSION** are already set.  We need to update the first 3 values now.
    - **FIVETRAN_API_KEY**: We need to be in our Fivetran UI, then click your name in the lower left nav panel, then click API Key, and click Generate New API Key.  Copy the ***base64 encoded key***, remove the default text including the brackets and paste that value. If you make a mistake, you can generate a new key as it will overwrite the previous one.
    - **FIVETRAN_DESTINATION_NAME**:  The instructor will place the value in the webinar chat area.  Copy and paste from there.
-   - **FIVETRAN_CONNECTION_NAME**: This must be all lower case letters, numbers, and underscores.  Since we are sharing a common environment, the <ins>connection names must be unique</ins>.  An option that works well here is, your initials followed by your birth month and day followed by agr.  Example: **dh0816agr** This value will be the connector name in Fivetran as well as the schema name in Snowflake.
-5. Once all 3 values are entered, save the file.
-6. Copy all 5 values from the agr_manual.env file and paste them into your terminal and press enter/return.
+   - **FIVETRAN_CONNECTION_NAME**: This must be all lower case letters, numbers, and underscores.  Since we are sharing a common environment, the <ins>connection names must be unique</ins>.  An option that works well here is, your initials followed by your birth month and day followed by agr.  Example: **dh0816agr** This value will be the connector name in Fivetran as well as the schema name in Snowflake.  Ensure you save the **agr_manual.env** file.
+7. Copy all 5 values from the agr_manual.env file and paste them into your terminal and press enter/return.
    - To view/verify the values are applied in Windows:
    ```bash
    set
@@ -59,13 +52,14 @@ The Agriculture AGR custom connector should fetch livestock health records from 
 ## Step 2: Create a Custom Fivetran Connector
 
 ### 2.1 Generate the Custom Connector Code Using AI Code Generation Assistance
-You may want to open a new browser tab from this GitHub tab into the **Prompts** subfolder. (The example below is for Gemini.)
+On your second GitHub browser tab, click on the **Prompts** subfolder. (The example below is for Gemini.)
 1. Open and copy the **system_prompt.txt** contents and paste to the chat area of your LLM.
 2. Next, open and copy the **user_prompt.txt** contents and paste below the system_prompt content in the chat area of your LLM on a new line.
 3. Press "enter/return" to run the operation.
+4. Copy the generated code from the chat session.
 
 ### 2.2 Debug and Deploy the Custom Connector in VS Code
-1. Copy the generated code from the chat session into the **connector.py** file and save.
+1. In your IDE, paste the generated code into the **connector.py** file and save.
 
 ***PAUSE: Let's analyze the code before continuing...understanding that it may not be 100% complete/accurate.***
 

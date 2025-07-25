@@ -104,9 +104,7 @@ You should receive a message stating the connection was deployed successfully al
 ## Step 4: Create a Streamlit Application in Snowflake
 
 ### 4.1 Copy the Streamlit Data App Code
-Open the **Streamlit_App** folder in this git repo on the other GitHub browser tab.  Here you have two options.
-
-Click the **app-agent.py** file and click the copy icon in the upper right.
+Open the **Streamlit_App** folder in this git repo on the other GitHub browser tab.  Click the **app-agent.py** file and click the copy icon in the upper right.
 
 ### 4.2 Create and Deploy the Streamlit in Snowflake Gen AI Data App
 1. Switch to the Snowflake tab in your browser.

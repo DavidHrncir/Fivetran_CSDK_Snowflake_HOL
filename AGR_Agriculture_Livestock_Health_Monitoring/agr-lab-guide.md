@@ -56,7 +56,7 @@ On your second GitHub browser tab, click on the **Prompts** subfolder. (The exam
 1. Open and copy the **system_prompt.txt** contents and paste to the chat area of your LLM.
 2. Next, open and copy the **user_prompt.txt** contents and paste below the system_prompt content in the chat area of your LLM on a new line.
 3. Press "enter/return" to run the operation.
-4. Copy the generated connector.py Python code from the chat session.
+4. Copy the generated connector.py code from the chat session.
 
 ### 2.2 Debug and Deploy the Custom Connector in VS Code
 1. In your IDE, paste the generated code into the **connector.py** file and save.

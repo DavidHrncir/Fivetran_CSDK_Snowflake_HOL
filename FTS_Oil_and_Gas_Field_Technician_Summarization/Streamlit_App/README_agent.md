@@ -1,6 +1,6 @@
 # LogLynx – AI-driven Field Technician Task Summarization
 
-![LogLynx](images/LogLynx.png)
+![LogLynx](images/loglynx.png)
 
 A Fivetran and Cortex-powered Streamlit in Snowflake data application for Oil & Gas with advanced AI Agent Workflows.
 

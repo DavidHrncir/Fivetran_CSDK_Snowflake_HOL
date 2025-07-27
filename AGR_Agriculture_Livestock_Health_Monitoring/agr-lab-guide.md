@@ -23,14 +23,14 @@ The Agriculture AGR custom connector should fetch livestock health records from 
 ***PAUSE: Let's quickly walk through the GitHub interface.***
 
 ## Step 1: Set up the Development Environment
-1. Create the project directory. On a Windows or Mac, create the **agriculture** folder in a folder that does not reside under a system folder such as "My Documents".
+1. Create the project directory. On a Windows or Mac, create the **agr** folder in a folder that does not reside under a system folder such as "My Documents".
 
 2. Download the project files from the git repo (easiest way):
    - **agr_manual.env**: Environment variables loading file
    - **configuration.json**: Configure your API credentials and settings
    - **connector.py**: Implement the connector using the Fivetran SDK
    - **requirements.txt**: Python requirements file
-3. Once the above files are downloaded copy/move them to the newly created **agriculture** folder
+3. Once the above files are downloaded copy/move them to the newly created **agr** folder
 4. Open this folder in your development IDE or in a terminal window
 5. **Activate your Python virtual environment in your terminal window**
 
@@ -113,7 +113,7 @@ Open the **Streamlit_App** folder in this git repo on the other GitHub browser t
 4. Click the refresh icon in your browser to refresh the schemas.
 5. Click the **+ Streamlit App** blue button in the upper right corner.
 6. Configure your app:
-   - App title: **[your initials]-Livestock Health Guardian**
+   - App title: **[your initials]-LivestockHealthGuardian**
    - Database: Select **HOL_DATABASE_1**
    - Schema: Select your schema which is the same name as your connector (example: dh0816agr) the schema created by your Fivetran connector.
 7. In the Streamlit Editor that appears (left side of the Streamlit UI), select all text (Command+A or Control+A) and delete it.

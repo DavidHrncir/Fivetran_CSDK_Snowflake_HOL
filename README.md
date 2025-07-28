@@ -56,7 +56,7 @@ You **must** have access to a Large Language Model to assist with the coding tas
   * **Anthropic Claude** (instructor tested)
   * **Open AI ChatGPT** (instructor tested)
   * **Meta.ai Llama** (instructor tested)
-  * **DeepSeek**
+  * **DeepSeek** (instructor tested)
 -----
 
 ## Folder Structure for Code 📁

@@ -74,6 +74,7 @@ pip install fivetran-connector-sdk
 fivetran reset
 fivetran debug --configuration configuration.json
 ```
+
 <div style="background-color: #fff3cd; padding: 12px 16px; border-left: 6px solid #ffcc00; margin-bottom: 20px; margin-top: 10px;">
   <strong>⚠️ NOTE:</strong><br>
 If your code is not working the first time, that's ok. You may need to debug a bit further. If your code does have a problem, in your Gen AI tool of choice add some verbiage like this: <strong>The code has a problem. Here is the debug output. Provide a fix and the complete and updated and working connector.py.</strong> Then copy and paste your debug output directly behind this and run your LLM again to see if it can narrow down where it went wrong and give you an updated connector.py file.

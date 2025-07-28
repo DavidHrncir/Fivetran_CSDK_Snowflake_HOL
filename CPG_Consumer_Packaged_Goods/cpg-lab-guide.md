@@ -74,13 +74,15 @@ pip install fivetran-connector-sdk
 fivetran reset
 fivetran debug --configuration configuration.json
 ```
-***PAUSE: Let's analyze what is happening behind the scenes.***
+
+<mark>⚠️ **NOTE:**
+If your code is not working the first time, that's ok. You may need to debug a bit further. If your code does have a problem, in your Gen AI tool of choice add some verbiage like this: **The code has a problem. Here is the debug output. Provide a fix and the complete, updated, and working connector.py.** Then copy and paste your debug output directly behind this and run your LLM again to see if it can narrow down where it went wrong and give you an updated connector.py file.</mark>
 
 4. Once debug completes, you are able to open a tool like dBeaver and open the DuckDB in the projects **files** folder and inspect the contents.  **Ensure you disconnect** the tool from the database when done since most tools will lock the database while open.
 
 5. If you let the code run to the end, you should see a statement that 600 rows were replicated/upserted.
 
-***PAUSE: Here is where you would iterate and refine.***
+***PAUSE: Let's analyze what is happening behind the scenes.***
 
 6. Let's deploy this code into Fivetran. This is the portion where all of the environment variables will be utilized.  Let's run the following command.  This command will prompt you for parameters, but you will notice that the command takes our environment variables and presents them as defaults.  You can just press enter/return through those.  **Note that only a portion of the Fivetran API key will be shown.**
 ```bash

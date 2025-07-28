@@ -52,10 +52,10 @@ A database query tool capable of opening a **DuckDB file** is required. A recomm
 
 You **must** have access to a Large Language Model to assist with the coding tasks during the lab. These models will significantly streamline the development process. (And don't worry about learning how to prompt for the best code output. We will have some basic prompts ready to go the day of the lab.) Recommended LLMs include:
 
-  * **Gemini** (instructor tested)
-  * **Claude** (instructor tested)
-  * **ChatGPT** (instructor tested)
-  * **Llama**
+  * **Google Gemini** (instructor tested)
+  * **Anthropic Claude** (instructor tested)
+  * **Open AI ChatGPT** (instructor tested)
+  * **Meta.ai Llama** (instructor tested)
   * **DeepSeek**
 -----
 

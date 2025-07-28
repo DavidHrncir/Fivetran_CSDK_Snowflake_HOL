@@ -91,6 +91,6 @@ If you are a current Fivetran customer, you will notice that you will be taken r
 
 # Let's build a custom connector!
 
-There are 8 verticals available from which to choose. Click on the vertical you would like to work with today, and we will walk through the folder structure.  Note that each vertical is set up the same. So no matter which vertical you choose, you will be able to follow along.
+There are 8 verticals available from which to choose in this git repo. Click on the vertical you would like to work with today, and we will walk through the folder structure.  Note that each vertical is set up in the same manner. So no matter which vertical you choose, you will be able to follow along.
 
 ## Let's go!

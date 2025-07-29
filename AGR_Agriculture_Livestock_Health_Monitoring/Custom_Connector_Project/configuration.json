@@ -1,5 +1,5 @@
 {
-    "api_key": "",
-    "base_url": "https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com",
-    "page_size": "100"
-  }
+  "api_key": "",
+  "base_url": "https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com",
+  "page_size": "100"
+}

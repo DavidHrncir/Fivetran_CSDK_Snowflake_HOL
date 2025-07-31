@@ -39,7 +39,7 @@ The Insurance ICP custom connector should fetch claims processing records from a
       - **FIVETRAN_API_KEY**: We need to be in our Fivetran UI, then click your name in the lower left nav panel, then click API Key, and click Generate New API Key.  Copy the ***base64 encoded key***, remove the default text including the brackets and paste that value. If you make a mistake, you can generate a new key as it will overwrite the previous one.
       - **FIVETRAN_DESTINATION_NAME**:  The instructor will place the value in the webinar chat area.  Copy and paste from there.
       - **FIVETRAN_CONNECTION_NAME**: This must be all lower case letters, numbers, and underscores.  Since we are sharing a common environment, the <ins>connection names must be unique</ins>.  An option that works well here is, your initials followed by your birth month and day followed by icp.  Example: **dh0816icp** This value will be the connector name in Fivetran as well as the schema name in Snowflake.  Ensure you save the **icp_manual.env** file.
-7. Set up our **configuration.json** file.  **page_size** and **base_url** are already set.  Copy and paste the **api_key** value from the webinar chat.  Ensure you save the **configuration.json** file.
+7. Set up our **configuration.json** file.  **page_size** and **base_url** are already set.  Copy and paste the **Fivetran SDK Demo API Key** value from the webinar chat into the **api_key** value.  Ensure you save the **configuration.json** file.
 8. Copy all 5 values from the icp_manual.env file and paste them into your terminal and press enter/return.
    - To view/verify the values are applied in Windows:
    ```bash

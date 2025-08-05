@@ -1,0 +1,30 @@
+Here is the API spec for this dataset: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/hed_api_spec
+
+Provide a custom Fivetran connector for Higher Education for the hed_data endpoint. There is only one dataset called hed_records.
+
+Here is a sample record:
+{
+    "academic_standing": "Satisfactory Progress",
+    "advisor_id": "ADV_1131",
+    "assignment_submissions": 11,
+    "at_risk_flag": false,
+    "avg_assignment_score": 54.9,
+    "course_completion_rate": 0.99,
+    "credit_hours_attempted": 16,
+    "credit_hours_earned": 15,
+    "current_gpa": 3.13,
+    "discussion_posts": 25,
+    "engagement_score": 63.9,
+    "enrollment_date": "2024-08-11 0:00:00",
+    "financial_aid_amount": 13793.33,
+    "intervention_count": 2,
+    "last_login_date": "2025-07-27 14:28:37",
+    "last_updated": "2025-07-31 23:57:37",
+    "last_updated_epoch": 1748797200,
+    "major_code": "PHIL",
+    "plagiarism_incidents": 0,
+    "record_id": "076cc9ae-6c0b-43fd-8d78-277fec3d0a8a",
+    "student_id": "STU_202400000",
+    "total_course_views": 144,
+    "writing_quality_score": 79.3
+}

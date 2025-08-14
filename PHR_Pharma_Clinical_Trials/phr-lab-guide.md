@@ -1,9 +1,9 @@
-# Fivetran Connector SDK Hands on Lab at Big Data London 2025: Higher Education Freshman Retention
+# Fivetran Connector SDK Hands on Lab with Snowflake 2025: Pharmaceutical Clinical Trial Design and Optimization
 
 ## Overview
 In this hands on lab, you'll build a **custom Fivetran connector** using the **Fivetran Connector SDK** and the **LLM service of your choice** to integrate data from a custom REST API into Snowflake. You'll then create a **Streamlit (in Snowflake)** application with various tools and dashboards powering key metrics as well as a **Snowflake Cortex AI-driven** feature to drive even deeper analytics, descriptive, and prescriptive insights.
 
-The Higher Education HED custom connector should fetch student academic and engagement records from a REST API and load them into a single table called `hed_records` in your Snowflake database. The connector should deliver detailed information about student academic and enagement details, including properties like enrollment date, academic standing, current gpa, avg assignment score, engagement score, and at risk flags. It should handle authentication, pagination, error handling, and maintain state between sync runs using a cursor-based approach.
+The Pharmaceutical PHR custom connector should fetch clinical trial and patient records from a REST API and load them into a single table called `phr_records` in your Snowflake database. The connector should deliver detailed information about clinical trial protocols and patient enrollment details, including properties like enrollment date, trial status, patient demographics, disease area, enrollment rate, dropout rate, and regulatory approval status. It should handle authentication, pagination, error handling, and maintain state between sync runs using a cursor-based approach.
 
 ## Lab Steps - Quick Access
 
@@ -23,23 +23,23 @@ The Higher Education HED custom connector should fetch student academic and enga
 ***PAUSE: Let's quickly walk through the GitHub interface.***
 
 ## Step 1: Set up the Development Environment
-1. Create the project directory. On a Windows or Mac, create the **hed** folder in a folder that does not reside under a system folder such as "My Documents".
+1. Create the project directory. On a Windows or Mac, create the **phr** folder in a folder that does not reside under a system folder such as "My Documents".
 
 2. Download the project files from the git repo (easiest way):
-   - **hed_manual.env**: Environment variables loading file
+   - **phr_manual.env**: Environment variables loading file
    - **configuration.json**: Configure your API credentials and settings
    - **connector.py**: Our connector code for this vertical
    - **requirements.txt**: Python requirements file
-3. Once the above files are downloaded copy/move them to the newly created **hed** folder
+3. Once the above files are downloaded copy/move them to the newly created **phr** folder
 4. Open this folder in your development IDE or in a terminal window
 5. **Activate your Python virtual environment in your terminal window**
 
 6. Set up our environment variables.
-   - Edit the **hed_manual.env** file.  These values will become environment variables in your current terminal session (meaning if you close the terminal by accident, you will need to re-apply these environment variables). NOTE: If these environment variables are not present, you will be prompted to enter them manually during debugging and deployment (added complexity).  Note that the **FIVETRAN_CONFIGURATION** and **FIVETRAN_PYTHON_VERSION** values are already set.  We need to update the first 3 values now.
+   - Edit the **phr_manual.env** file.  These values will become environment variables in your current terminal session (meaning if you close the terminal by accident, you will need to re-apply these environment variables). NOTE: If these environment variables are not present, you will be prompted to enter them manually during debugging and deployment (added complexity).  Note that the **FIVETRAN_CONFIGURATION** and **FIVETRAN_PYTHON_VERSION** values are already set.  We need to update the first 3 values now.
       - **FIVETRAN_API_KEY**: We need to be in our Fivetran UI, then click your name in the lower left nav panel, then click API Key, and click Generate New API Key.  Copy the ***base64 encoded key***, remove the default text including the brackets and paste that value. If you make a mistake, you can generate a new key as it will overwrite the previous one.
       - **FIVETRAN_DESTINATION_NAME**:  The instructor will place the value in the webinar chat area.  Copy and paste from there.
-      - **FIVETRAN_CONNECTION_NAME**: This must be all lower case letters, numbers, and underscores.  Since we are sharing a common environment, the <ins>connection names must be unique</ins>.  An option that works well here is, your initials followed by your birth month and day followed by hed.  Example: **dh0816hed** This value will be the connector name in Fivetran as well as the schema name in Snowflake.  Ensure you save the **hed_manual.env** file.
-7. Copy all 5 values from the hed_manual.env file and paste them into your terminal and press enter/return.
+      - **FIVETRAN_CONNECTION_NAME**: This must be all lower case letters, numbers, and underscores.  Since we are sharing a common environment, the <ins>connection names must be unique</ins>.  An option that works well here is, your initials followed by your birth month and day followed by phr.  Example: **dh0816phr** This value will be the connector name in Fivetran as well as the schema name in Snowflake.  Ensure you save the **phr_manual.env** file.
+7. Copy all 5 values from the phr_manual.env file and paste them into your terminal and press enter/return.
    - To view/verify the values are applied in Windows:
    ```bash
    set
@@ -104,37 +104,37 @@ Open the **Streamlit_App** folder in this git repo on the other GitHub browser t
 4. Click the refresh icon in your browser to refresh the schemas.
 5. Click the **+ Streamlit App** blue button in the upper right corner.
 6. Configure your app:
-   - App title:  **[your initials]-StudentSuccess**
+   - App title: **[your initials]-TrialGenius**
    - Database: Select **HOL_DATABASE_1**
-   - Schema: Select your schema which is the same name as your connector (example: dh0816hed) the schema created by your Fivetran connector.
-7. In the Streamlit Editor that appears (left side of the Streamlit UI), select all text (Command+A) and delete it
-8. Paste the copied Streamlit application code into the empty editor (Command+V):
-9. Click the blue **Run** button in the upper right corner
-10. Close the editor by clicking the middle icon in the bottom left navigation
+   - Schema: Select your schema which is the same name as your connector (example: dh0816phr) the schema created by your Fivetran connector.
+7. In the Streamlit Editor that appears (left side of the Streamlit UI), select all text (Command+A or Control+A) and delete it.
+8. Paste the copied Streamlit application code into the empty editor (Command+V or Control+V).
+9. Click the blue **Run** button in the upper right corner.
+10. Close the editor by clicking the middle icon in the bottom left navigation.
 
-### 3.3 Explore the Streamlit in Snowflake Gen AI Data App
-The StudentSuccess data app should now be running with the following sections:
-- **Metrics**: View key performance metrics, gpa distribution, academic standing, at risk distribution, aid vs gpa correlation, and more
-- **AI Insights**: Generate AI-powered analysis of the student academic and engagement data across four focus areas
+### 4.3 Explore the Streamlit in Snowflake Gen AI Data App
+The TrialGenius data app should now be running with the following sections:
+- **Metrics**: View key performance metrics, patient age distribution, enrollment rates by disease area, trial status distribution, dropout rate trends, site performance analysis, and comprehensive clinical trial statistics
+- **AI Insights**: Generate AI-powered analysis of the clinical trial and patient enrollment data across four focus areas with advanced agent workflows providing transparent, step-by-step pharmaceutical analysis
 - **Insights History**: Access previously generated AI insights
 - **Data Explorer**: Browse the underlying data
 
 ## Done!
 You've successfully:
 1. Created a custom Fivetran connector using the Fivetran Connector SDK
-2. Deployed the connector to sync higher education student academic and engagement data into Snowflake
+2. Deployed the connector to sync pharmaceutical clinical trial data into Snowflake
 3. Built a Streamlit in Snowflake data app to visualize and analyze the data using Snowflake Cortex
 
 ## Next Steps
 Consider how you might adapt this solution for your own use:
-- Integration with student information systems like Banner, PeopleSoft, or Colleague for comprehensive academic record management
-- Adding real-time student engagement monitoring from learning management systems like Canvas, Blackboard, or Moodle
-- Implementing machine learning models for more sophisticated at-risk student identification and intervention routing
-- Customizing the Streamlit app for specific academic programs, student populations, or institutional retention goals
+- Integration with clinical trial management systems like Veeva Vault CTMS, Oracle Clinical One, or Medidata Rave for comprehensive trial protocol management
+- Adding real-time patient enrollment monitoring from electronic data capture systems like Medidata Rave EDC, Oracle Clinical One Data Collection, or Veeva Vault EDC
+- Implementing machine learning models for more sophisticated trial failure prediction and adaptive protocol optimization
+- Customizing the Streamlit app for specific therapeutic areas, patient populations, or pharmaceutical development goals
 
 ## Resources
 - Fivetran Connector SDK Documentation: [https://fivetran.com/docs/connectors/connector-sdk](https://fivetran.com/docs/connectors/connector-sdk)  
 - Fivetran Connector SDK Examples: [https://fivetran.com/docs/connector-sdk/examples](https://fivetran.com/docs/connector-sdk/examples)
-- API Connector Reference: [https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/hed_api_spec](https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/hed_api_spec)
+- API Connector Reference: [https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/icp_api_spec](https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/icp_api_spec)
 - Snowflake Cortex Documentation: [https://docs.snowflake.com/en/user-guide/snowflake-cortex/llm-functions](https://docs.snowflake.com/en/user-guide/snowflake-cortex/llm-functions)
 - Snowflake Streamlit Documentation: [https://docs.snowflake.com/en/developer-guide/streamlit/about-streamlit](https://docs.snowflake.com/en/developer-guide/streamlit/about-streamlit)

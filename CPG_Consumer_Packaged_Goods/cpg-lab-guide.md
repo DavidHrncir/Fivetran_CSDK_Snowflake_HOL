@@ -28,7 +28,7 @@ The CPG Insights custom connector should fetch consumer packaged goods records f
 2. Download the project files from the git repo (easiest way):
    - **cpg_manual.env**: Environment variables loading file
    - **configuration.json**: Configure your API credentials and settings
-   - **connector.py**: Implement the connector using the Fivetran SDK
+   - **connector.py**: Our connector code for this vertical
    - **requirements.txt**: Python requirements file
 3. Once the above files are downloaded copy/move them to the newly created **cpg** folder
 4. Open this folder in your development IDE or in a terminal window
@@ -39,8 +39,7 @@ The CPG Insights custom connector should fetch consumer packaged goods records f
       - **FIVETRAN_API_KEY**: We need to be in our Fivetran UI, then click your name in the lower left nav panel, then click API Key, and click Generate New API Key.  Copy the ***base64 encoded key***, remove the default text including the brackets and paste that value. If you make a mistake, you can generate a new key as it will overwrite the previous one.
       - **FIVETRAN_DESTINATION_NAME**:  The instructor will place the value in the webinar chat area.  Copy and paste from there.
       - **FIVETRAN_CONNECTION_NAME**: This must be all lower case letters, numbers, and underscores.  Since we are sharing a common environment, the <ins>connection names must be unique</ins>.  An option that works well here is, your initials followed by your birth month and day followed by cpg.  Example: **dh0816cpg** This value will be the connector name in Fivetran as well as the schema name in Snowflake.  Ensure you save the **cpg_manual.env** file.
-7. Set up our **configuration.json** file.  **page_size** and **base_url** are already set.  Copy and paste the **Fivetran SDK Demo API Key** value from the webinar chat into the **api_key** value.  Ensure you save the **configuration.json** file.
-8. Copy all 5 values from the cpg_manual.env file and paste them into your terminal and press enter/return.
+7. Copy all 5 values from the cpg_manual.env file and paste them into your terminal and press enter/return.
    - To view/verify the values are applied in Windows:
    ```bash
    set
@@ -52,39 +51,29 @@ The CPG Insights custom connector should fetch consumer packaged goods records f
 
 ## Step 2: Create a Custom Fivetran Connector
 
-### 2.1 Generate the Custom Connector Code Using AI Code Generation Assistance
-On your second GitHub browser tab, click on the **Prompts** subfolder. (The example below is for Gemini.)
-1. Open and copy the **system_prompt.txt** contents and paste to the chat area of your LLM.
-2. Next, open and copy the **user_prompt.txt** contents and paste below the system_prompt content in the chat area of your LLM on a new line.
-3. Press "enter/return" to run the operation.
-4. Copy the generated connector.py code from the chat session.
-
-### 2.2 Debug and Deploy the Custom Connector in VS Code
-1. In your IDE, paste the generated code into the **connector.py** file and save.
-
-***PAUSE: Let's analyze the code before continuing...understanding that it may not be 100% complete/accurate.***
-
-2. Let's install the Fivetran Connector SDK package if you not have already done this.  In your terminal with your Python environment already activated, run the following command:
+### 2.1 Install the Fivetran Connector SDK Package
+Let's install the Fivetran Connector SDK package. We will directly use version 1.7.0. In your terminal with your Python environment already activated, run the following command:
 ```bash
-pip install fivetran-connector-sdk
+pip install fivetran-connector-sdk==1.7.0
 ```
 
-3. Let's debug our code in the terminal by running the following commands. **fivetran reset** tells your local SDK system that all files and temporary databases should be reset for a brand new run. **fivetran debug** tells your local SDK system that it should mimic locally what Fivetran would be doing in Fivetran's environment.  You will notice that you must pass in the **--configuration configuration.json** parameter for the debug command since you could be testing multiple types of configurations during a development/testing cycle.
+### 2.2 Debug the Custom Connector Locally
+1. Let's debug our code in the terminal by running the following commands. **fivetran reset** tells your local SDK system that all files and temporary databases should be reset for a brand new run. **fivetran debug** tells your local SDK system that it should mimic locally what Fivetran would be doing in Fivetran's environment.  You will notice that you must pass in the **--configuration configuration.json** parameter for the debug command since you could be testing multiple types of configurations during a development/testing cycle.
 ```bash
 fivetran reset
+```
+```bash
 fivetran debug --configuration configuration.json
 ```
 
-<mark>⚠️ **NOTE:**
-If your code is not working the first time, that's ok. You may need to debug a bit further. If your code does have a problem, in your Gen AI tool of choice add some verbiage like this: **The code has a problem. Here is the debug output. Provide a fix and the complete, updated, and working connector.py.** Then copy and paste your debug output directly behind this and run your LLM again to see if it can narrow down where it went wrong and give you an updated connector.py file.</mark>
+2. (Optional-Instructor will demo) Once debug completes, you are able to open a tool like dBeaver and open the DuckDB in the projects **files** folder and inspect the contents.  **Ensure you disconnect** the tool from the database when done since most tools will lock the database while open.
 
-4. Once debug completes, you are able to open a tool like dBeaver and open the DuckDB in the projects **files** folder and inspect the contents.  **Ensure you disconnect** the tool from the database when done since most tools will lock the database while open.
-
-5. If you let the code run to the end, you should see a statement that 600 rows were replicated/upserted.
+3. If you let the code run to the end, you should see a statement that 600 rows were replicated/upserted.
 
 ***PAUSE: Let's analyze what is happening behind the scenes.***
 
-6. Let's deploy this code into Fivetran. This is the portion where all of the environment variables will be utilized.  Let's run the following command.  This command will prompt you for parameters, but you will notice that the command takes our environment variables and presents them as defaults.  You can just press enter/return through those.  **Note that only a portion of the Fivetran API key will be shown.**
+### 2.3 Deploy the Custom Connector to Fivetran
+Let's deploy this code into Fivetran. This is the portion where all of the environment variables will be utilized.  Let's run the following command.  This command will prompt you for parameters, but you will notice that the command takes our environment variables and presents them as defaults.  You can just press enter/return through those.  **Note that only a portion of the Fivetran API key will be shown.**
 ```bash
 fivetran deploy --configuration configuration.json
 ```

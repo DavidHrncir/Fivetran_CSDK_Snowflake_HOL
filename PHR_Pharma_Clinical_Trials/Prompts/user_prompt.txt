@@ -1,0 +1,25 @@
+Here is the API spec for this dataset: https://sdk-demo-api-dot-internal-sales.uc.r.appspot.com/phr_api_spec
+
+Provide a custom connector for Pharma for the phr_data endpoint. 1 table called phr_records - all columns. 
+
+Here is a sample record:
+{
+    "disease_area": "Immunology",
+    "dropout_rate": 24.3023082354,
+    "enrollment_date": "2025-06-17",
+    "enrollment_rate": 99.7464688479,
+    "last_updated_epoch": 1748797200,
+    "patient_age": 79,
+    "patient_gender": "Male",
+    "patient_id": "PATIENT_000000",
+    "protocol_amendment_date": "2025-02-19",
+    "protocol_id": "PROTOCOL_000000",
+    "record_id": "b2e363a9-18cd-4b42-b731-6f5fec91f22c",
+    "regulatory_approval_status": "On Hold",
+    "site_id": "SITE_000000",
+    "site_name": "Contract Research Organization",
+    "sponsor_name": "Academic Institution",
+    "trial_id": "TRIAL_000000",
+    "trial_name": "Pain Management",
+    "trial_status": "Inactive"
+}

@@ -119,6 +119,16 @@ The StudentSuccess data app should now be running with the following sections:
 - **Insights History**: Access previously generated AI insights
 - **Data Explorer**: Browse the underlying data
 
+# 5 (Optional) Use GenAI to Build Our Code
+This step completely optional, but if you would like to see how we generated the code for this connection, follow the below steps. The **system_prompt.txt** contains the generic prompt info that fits all the endpoints/verticals in this repo. The **user_prompt.txt** contains specific information about the API endpoint that is used for this vertical.
+1. From the **Prompts** folder in this vertical, copy the **system_prompt.txt** text and paste directly into your model.  <ins>Note, if you are using a model which has the system and user prompts separated, like Anthropic Claude, you can paste the text into the system prompt area and possibly save the system prompt to be used as the basis for other connection builds in the future.</ins>
+2. Next, from the **Prompts** folder in this vertical, copy the **user_prompt.txt** text and paste directly after the system prompt.  Again, if your interface has a separate section for the user prompt, paste it there.
+3. Execute the prompts.
+4. Copy and paste the results overwriting all of the code in the **connector.py** file.
+5. Run step **2.2** above to debug and step **2.3** to deploy your generated version.
+
+Instructor tidbits on using GenAI. Most LLMs work flawlessly with the prompts in this repo. The prompts are created for the source API used for this lab. If there is an error, copy and paste the error back into the LLM and ask it to review and fix the code.  If no errors, but the code does not work, that requires good-ole debugging. Most of the time when this happens, there is only a small bug like incorrect API key name, table name, or the use of the **has_more** flag. For the most part, the code should be complete and only minor tweaks may be needed.
+
 ## Done!
 You've successfully:
 1. Created a custom Fivetran connector using the Fivetran Connector SDK

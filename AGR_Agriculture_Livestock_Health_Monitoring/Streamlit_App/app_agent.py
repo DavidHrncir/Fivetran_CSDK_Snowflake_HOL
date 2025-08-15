@@ -140,7 +140,7 @@ st.markdown(f'''
 
 # Define available models as strings
 MODELS = [
-    "claude-4-sonnet", "claude-3-7-sonnet", "claude-3-5-sonnet", "llama3.1-8b", "llama3.1-70b", "llama4-maverick", "llama4-scout", "llama3.2-1b", "snowflake-llama-3.1-405b", "snowflake-llama-3.3-70b", "mistral-large2", "mistral-7b", "deepseek-r1", "snowflake-arctic", "reka-flash", "jamba-instruct", "gemma-7b"
+    "openai-gpt-oss-120b", "openai-gpt-4.1", "openai-gpt-5", "openai-gpt-5-mini", "openai-gpt-5-nano", "openai-gpt-5-chat", "claude-4-sonnet", "claude-3-7-sonnet", "claude-3-5-sonnet", "llama3.1-8b", "llama3.1-70b", "llama4-maverick", "llama4-scout", "llama3.2-1b", "snowflake-llama-3.1-405b", "snowflake-llama-3.3-70b", "mistral-large2", "mistral-7b", "deepseek-r1", "snowflake-arctic", "reka-flash", "jamba-instruct", "gemma-7b"
 ]
 
 if 'insights_history' not in st.session_state:
@@ -594,7 +594,7 @@ cat_candidates = [col for col in sample_cols if data[col].dtype == 'object' and 
 # Four tabs - Metrics tab first, then AI Insights
 tabs = st.tabs(["📊 Metrics", "✨ AI Insights", "📁 Insights History", "🔍 Data Explorer"])
 
-# Metrics tab (first)
+# Metrics tab (first) — title clipping fixed
 with tabs[0]:
     st.subheader("📊 Key Performance Metrics")
     
@@ -625,28 +625,43 @@ with tabs[0]:
     
     # Create and display charts
     charts = create_metrics_charts(data)
-    
+
+    # ---- Title clipping fix ----
+    def _fixed_title(text: str) -> alt.TitleParams:
+        return alt.TitleParams(
+            text=text,
+            fontSize=16,
+            fontWeight='bold',
+            anchor='start',
+            offset=14  # moves title down
+        )
+
+    _PAD = {"top": 28, "left": 6, "right": 6, "bottom": 6}
+
+    charts_fixed = []
     if charts:
+        for item in charts:
+            try:
+                chart_title, chart_obj = item
+            except Exception:
+                chart_title, chart_obj = "", item
+            chart_obj = chart_obj.properties(title=_fixed_title(chart_title or ""), padding=_PAD)
+            chart_obj = chart_obj.configure_title(anchor='start')
+            charts_fixed.append((chart_title, chart_obj))
+
+    if charts_fixed:
         st.subheader("📈 Performance Visualizations")
-        
-        # Display charts in a 2-column grid, ensuring all charts are shown
-        num_charts = len(charts)
+        num_charts = len(charts_fixed)
         for i in range(0, num_charts, 2):
             cols = st.columns(2)
-            
-            # Left column chart
             if i < num_charts:
-                chart_title, chart = charts[i]
+                _, chart = charts_fixed[i]
                 with cols[0]:
                     st.altair_chart(chart, use_container_width=True)
-            
-            # Right column chart
             if i + 1 < num_charts:
-                chart_title, chart = charts[i + 1]
+                _, chart = charts_fixed[i + 1]
                 with cols[1]:
                     st.altair_chart(chart, use_container_width=True)
-        
-        # Display chart count for debugging
         st.caption(f"Displaying {num_charts} performance charts")
     else:
         st.info("No suitable data found for creating visualizations.")
@@ -654,16 +669,10 @@ with tabs[0]:
     # Enhanced Summary statistics table
     st.subheader("📈 Summary Statistics")
     if numeric_candidates:
-        # Create enhanced summary statistics
         summary_stats = data[numeric_candidates].describe()
-        
-        # Transpose for better readability and add formatting
         summary_df = summary_stats.T.round(3)
-        
-        # Add meaningful column names and formatting
         summary_df.columns = ['Count', 'Mean', 'Std Dev', 'Min', '25%', '50% (Median)', '75%', 'Max']
         
-        # Create two columns for better organization
         col1, col2 = st.columns(2)
         
         with col1:
@@ -672,90 +681,66 @@ with tabs[0]:
             key_metrics_present = [m for m in key_metrics if m in summary_df.index]
             
             if key_metrics_present:
-                # Create a more readable format
                 for metric in key_metrics_present:
                     mean_val = summary_df.loc[metric, 'Mean']
                     min_val = summary_df.loc[metric, 'Min']
                     max_val = summary_df.loc[metric, 'Max']
                     
-                    # Format based on metric type
                     if 'weight' in metric.lower():
-                        st.metric(
-                            label=metric.replace('_', ' ').title(),
-                            value=f"{mean_val:,.0f} lbs",
-                            help=f"Range: {min_val:,.0f} - {max_val:,.0f} lbs"
-                        )
+                        st.metric(metric.replace('_', ' ').title(),
+                                  f"{mean_val:,.0f} lbs",
+                                  help=f"Range: {min_val:,.0f} - {max_val:,.0f} lbs")
                     elif 'risk' in metric.lower():
-                        st.metric(
-                            label=metric.replace('_', ' ').title(),
-                            value=f"{mean_val:.3f}",
-                            help=f"Range: {min_val:.3f} - {max_val:.3f}"
-                        )
+                        st.metric(metric.replace('_', ' ').title(),
+                                  f"{mean_val:.3f}",
+                                  help=f"Range: {min_val:.3f} - {max_val:.3f}")
                     elif 'temperature' in metric.lower():
-                        st.metric(
-                            label=metric.replace('_', ' ').title(),
-                            value=f"{mean_val:.1f}°F",
-                            help=f"Range: {min_val:.1f}°F - {max_val:.1f}°F"
-                        )
+                        st.metric(metric.replace('_', ' ').title(),
+                                  f"{mean_val:.1f}°F",
+                                  help=f"Range: {min_val:.1f}°F - {max_val:.1f}°F")
                     elif 'humidity' in metric.lower() or 'precipitation' in metric.lower():
-                        st.metric(
-                            label=metric.replace('_', ' ').title(),
-                            value=f"{mean_val:.1f}%",
-                            help=f"Range: {min_val:.1f}% - {max_val:.1f}%"
-                        )
+                        st.metric(metric.replace('_', ' ').title(),
+                                  f"{mean_val:.1f}%",
+                                  help=f"Range: {min_val:.1f}% - {max_val:.1f}%")
                     elif 'age' in metric.lower():
-                        st.metric(
-                            label=metric.replace('_', ' ').title(),
-                            value=f"{mean_val:.1f} years",
-                            help=f"Range: {min_val:.1f} - {max_val:.1f} years"
-                        )
+                        st.metric(metric.replace('_', ' ').title(),
+                                  f"{mean_val:.1f} years",
+                                  help=f"Range: {min_val:.1f} - {max_val:.1f} years")
                     else:
-                        st.metric(
-                            label=metric.replace('_', ' ').title(),
-                            value=f"{mean_val:.2f}",
-                            help=f"Range: {min_val:.2f} - {max_val:.2f}"
-                        )
+                        st.metric(metric.replace('_', ' ').title(),
+                                  f"{mean_val:.2f}",
+                                  help=f"Range: {min_val:.2f} - {max_val:.2f}")
         
         with col2:
             st.markdown("**📊 Distribution Insights**")
-            
-            # Calculate and display key insights
             insights = []
-            
             if 'predicted_health_risk' in summary_df.index:
                 hr_mean = summary_df.loc['predicted_health_risk', 'Mean']
                 hr_std = summary_df.loc['predicted_health_risk', 'Std Dev']
                 insights.append(f"• **Health Risk Variability**: {hr_std:.3f} (σ)")
-                
                 if hr_mean > 0.5:
                     insights.append(f"• **⚠️ Elevated health risk** ({hr_mean:.1%})")
                 else:
                     insights.append(f"• **Good health status** ({hr_mean:.1%} avg risk)")
-            
             if 'weight' in summary_df.index:
                 wt_q75 = summary_df.loc['weight', '75%']
                 wt_q25 = summary_df.loc['weight', '25%']
-                iqr = wt_q75 - wt_q25
-                insights.append(f"• **Weight IQR**: {iqr:,.0f} lbs")
-            
+                insights.append(f"• **Weight IQR**: {wt_q75 - wt_q25:,.0f} lbs")
             if 'age' in summary_df.index:
                 age_median = summary_df.loc['age', '50% (Median)']
                 age_max = summary_df.loc['age', 'Max']
                 insights.append(f"• **Median Age**: {age_median:.1f} years")
                 if age_max > 10:
                     insights.append(f"• **Mature animals present**: up to {age_max:.1f} years")
-            
             if 'temperature' in summary_df.index:
                 temp_mean = summary_df.loc['temperature', 'Mean']
                 temp_std = summary_df.loc['temperature', 'Std Dev']
                 insights.append(f"• **Avg Environmental Temp**: {temp_mean:.1f}°F")
                 if temp_std > 15:
                     insights.append(f"• **Variable conditions** (σ = {temp_std:.1f}°F)")
-            
             for insight in insights:
                 st.markdown(insight)
         
-        # Full detailed table (collapsible)
         with st.expander("📋 Detailed Statistics Table", expanded=False):
             st.dataframe(
                 summary_df.style.format({
@@ -770,6 +755,7 @@ with tabs[0]:
                 }),
                 use_container_width=True
             )
+
 
 # AI Insights tab
 with tabs[1]:

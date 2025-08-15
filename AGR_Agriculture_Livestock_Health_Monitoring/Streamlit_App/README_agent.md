@@ -220,7 +220,7 @@ This application uses:
 - **Agent Progress Visualization**: Real-time display of agent execution steps with agricultural context and completion tracking
 - **Streamlit in Snowflake** for the user interface with enhanced agent workflow displays
 - **Snowflake Cortex** for AI-powered insights generation through agent-managed prompting
-- **Multiple AI models** including Claude 4 Sonnet, Claude 3.5 Sonnet, Llama 3.1/3.3, Mistral, DeepSeek, and more for agent intelligence
+- **Multiple AI models** including OpenAI GPT, Claude 4 Sonnet, Claude 3.5 Sonnet, Llama 3.1/3.3, Mistral, DeepSeek, and more for agent intelligence
 - **Snowpark for Python** for data processing within agent workflows
 - **Fivetran Connector SDK** for building a custom connector to retrieve synthetic agriculture livestock data from an API server
 - **Custom Fivetran connector** for automated, reliable data movement into Snowflake

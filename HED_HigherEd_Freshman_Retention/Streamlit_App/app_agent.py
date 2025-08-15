@@ -146,7 +146,7 @@ st.markdown(f'''
 
 # Define available models as strings
 MODELS = [
-    "claude-4-sonnet", "claude-3-7-sonnet", "claude-3-5-sonnet", "llama3.1-8b", "llama3.1-70b", "llama4-maverick", "llama4-scout", "llama3.2-1b", "snowflake-llama-3.1-405b", "snowflake-llama-3.3-70b", "mistral-large2", "mistral-7b", "deepseek-r1", "snowflake-arctic", "reka-flash", "jamba-instruct", "gemma-7b"
+    "openai-gpt-oss-120b", "openai-gpt-4.1", "openai-gpt-5", "openai-gpt-5-mini", "openai-gpt-5-nano", "openai-gpt-5-chat", "claude-4-sonnet", "claude-3-7-sonnet", "claude-3-5-sonnet", "llama3.1-8b", "llama3.1-70b", "llama4-maverick", "llama4-scout", "llama3.2-1b", "snowflake-llama-3.1-405b", "snowflake-llama-3.3-70b", "mistral-large2", "mistral-7b", "deepseek-r1", "snowflake-arctic", "reka-flash", "jamba-instruct", "gemma-7b"
 ]
 
 if 'insights_history' not in st.session_state:
@@ -341,7 +341,7 @@ def create_metrics_charts(data):
         ).properties(
             title='Engagement by Standing',
             width=380,
-            height=280
+            height=340
         )
         charts.append(('Engagement by Standing', engagement_chart))
     
@@ -607,11 +607,13 @@ cat_candidates = [col for col in sample_cols if data[col].dtype == 'object' and 
 # Four tabs - Metrics tab first, then AI Insights
 tabs = st.tabs(["📊 Metrics", "✨ AI Insights", "📁 Insights History", "🔍 Data Explorer"])
 
-# Metrics tab (now first)
+# ─────────────────────────────────────────────────────────
+# 📊 HED Metrics Tab — title clipping fixed (Altair offset + padding)
+# ─────────────────────────────────────────────────────────
 with tabs[0]:
     st.subheader("📊 Key Performance Metrics")
     
-    # Display key metrics in columns
+    # Display key metrics in columns  (unchanged)
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
@@ -636,35 +638,65 @@ with tabs[0]:
     
     st.markdown("---")
     
-    # Create and display charts
-    charts = create_metrics_charts(data)
-    
+    # Create charts (existing helper, unchanged)
+    charts = create_metrics_charts(data)  # returns list of (title, alt.Chart)
+
+    # ---- Title clipping fix (Altair) ----
+    # 1) TitleParams with offset to push the title down
+    # 2) Extra top padding so the title never clips in Snowflake Streamlit
+    def _fixed_title(text: str) -> alt.TitleParams:
+        return alt.TitleParams(
+            text=text,
+            fontSize=16,
+            fontWeight='bold',
+            anchor='start',
+            offset=14  # key: moves the title downward
+        )
+
+    _PAD = {"top": 28, "left": 6, "right": 6, "bottom": 6}  # key: explicit headroom
+
+    charts_fixed = []
     if charts:
+        for item in charts:
+            # Expected shape: (title_text, chart_object). Fallback if a bare chart arrives.
+            try:
+                t, ch = item
+            except Exception:
+                t, ch = "", item
+
+            # Apply offset + padding to every chart
+            ch = ch.properties(title=_fixed_title(t or ""), padding=_PAD)
+            ch = ch.configure_title(anchor='start')
+            charts_fixed.append((t, ch))
+    
+    if charts_fixed:
         st.subheader("📈 Performance Visualizations")
         
-        # Display charts in a 2-column grid, ensuring all 6 charts are shown
-        num_charts = len(charts)
+        # Display charts in a 2-column grid (layout unchanged)
+        num_charts = len(charts_fixed)
         for i in range(0, num_charts, 2):
             cols = st.columns(2)
             
             # Left column chart
             if i < num_charts:
-                chart_title, chart = charts[i]
+                _, chart = charts_fixed[i]
                 with cols[0]:
                     st.altair_chart(chart, use_container_width=True)
             
             # Right column chart
             if i + 1 < num_charts:
-                chart_title, chart = charts[i + 1]
+                _, chart = charts_fixed[i + 1]
                 with cols[1]:
                     st.altair_chart(chart, use_container_width=True)
         
-        # Display chart count for debugging
+        # Display chart count for debugging (unchanged)
         st.caption(f"Displaying {num_charts} performance charts")
     else:
         st.info("No suitable data found for creating visualizations.")
     
-    # Enhanced Summary statistics table
+    # ─────────────────────────────────────────────────────
+    # 📈 Summary Statistics (INTACT — unchanged logic/formatting)
+    # ─────────────────────────────────────────────────────
     st.subheader("📈 Summary Statistics")
     if numeric_candidates:
         # Create enhanced summary statistics
@@ -676,7 +708,7 @@ with tabs[0]:
         # Add meaningful column names and formatting
         summary_df.columns = ['Count', 'Mean', 'Std Dev', 'Min', '25%', '50% (Median)', '75%', 'Max']
         
-        # Create three columns for better organization
+        # Create two columns for organization
         col1, col2 = st.columns(2)
         
         with col1:
@@ -687,13 +719,11 @@ with tabs[0]:
             if key_metrics_present:
                 key_stats_df = summary_df.loc[key_metrics_present]
                 
-                # Create a more readable format
                 for metric in key_stats_df.index:
                     mean_val = key_stats_df.loc[metric, 'Mean']
                     min_val = key_stats_df.loc[metric, 'Min']
                     max_val = key_stats_df.loc[metric, 'Max']
                     
-                    # Format based on metric type
                     if 'gpa' in metric.lower() or 'score' in metric.lower():
                         st.metric(
                             label=metric.replace('_', ' ').title(),
@@ -715,15 +745,12 @@ with tabs[0]:
         
         with col2:
             st.markdown("**📊 Distribution Insights**")
-            
-            # Calculate and display key insights
             insights = []
             
             if 'current_gpa' in summary_df.index:
                 gpa_mean = summary_df.loc['current_gpa', 'Mean']
                 gpa_std = summary_df.loc['current_gpa', 'Std Dev']
                 insights.append(f"• **GPA Variability**: {gpa_std:.2f} (σ)")
-                
                 if gpa_mean < 2.5:
                     insights.append(f"• **⚠️ Low average GPA** ({gpa_mean:.2f})")
                 else:
@@ -732,8 +759,7 @@ with tabs[0]:
             if 'financial_aid_amount' in summary_df.index:
                 aid_q75 = summary_df.loc['financial_aid_amount', '75%']
                 aid_q25 = summary_df.loc['financial_aid_amount', '25%']
-                iqr = aid_q75 - aid_q25
-                insights.append(f"• **Financial Aid IQR**: ${iqr:,.0f}")
+                insights.append(f"• **Financial Aid IQR**: ${aid_q75 - aid_q25:,.0f}")
             
             if 'engagement_score' in summary_df.index:
                 eng_median = summary_df.loc['engagement_score', '50% (Median)']
@@ -764,6 +790,7 @@ with tabs[0]:
                 }),
                 use_container_width=True
             )
+
 
 # AI Insights tab
 with tabs[1]:

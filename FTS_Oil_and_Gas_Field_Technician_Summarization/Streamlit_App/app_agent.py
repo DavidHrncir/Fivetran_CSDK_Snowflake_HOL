@@ -142,7 +142,7 @@ st.markdown(f'''
 
 # Define available models as strings
 MODELS = [
-    "claude-4-sonnet", "claude-3-7-sonnet", "claude-3-5-sonnet", "llama3.1-8b", "llama3.1-70b", "llama4-maverick", "llama4-scout", "llama3.2-1b", "snowflake-llama-3.1-405b", "snowflake-llama-3.3-70b", "mistral-large2", "mistral-7b", "deepseek-r1", "snowflake-arctic", "reka-flash", "jamba-instruct", "gemma-7b"
+    "openai-gpt-oss-120b", "openai-gpt-4.1", "openai-gpt-5", "openai-gpt-5-mini", "openai-gpt-5-nano", "openai-gpt-5-chat", "claude-4-sonnet", "claude-3-7-sonnet", "claude-3-5-sonnet", "llama3.1-8b", "llama3.1-70b", "llama4-maverick", "llama4-scout", "llama3.2-1b", "snowflake-llama-3.1-405b", "snowflake-llama-3.3-70b", "mistral-large2", "mistral-7b", "deepseek-r1", "snowflake-arctic", "reka-flash", "jamba-instruct", "gemma-7b"
 ]
 
 if 'insights_history' not in st.session_state:
@@ -595,11 +595,13 @@ cat_candidates = [col for col in sample_cols if data[col].dtype == 'object' and 
 # Four tabs - Metrics tab first, then AI Insights
 tabs = st.tabs(["📊 Metrics", "✨ AI Insights", "📁 Insights History", "🔍 Data Explorer"])
 
-# Metrics tab (now first)
+# ─────────────────────────────────────────────────────────
+# 📊 FTS Metrics Tab — title clipping fixed (Altair offset + padding)
+# ─────────────────────────────────────────────────────────
 with tabs[0]:
     st.subheader("📊 Key Performance Metrics")
     
-    # Display key metrics in columns
+    # Display key metrics in columns (unchanged)
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
@@ -624,47 +626,67 @@ with tabs[0]:
     
     st.markdown("---")
     
-    # Create and display charts
-    charts = create_metrics_charts(data)
-    
+    # Create charts (existing helper)
+    charts = create_metrics_charts(data)  # returns list of (title, alt.Chart)
+
+    # ---- Title clipping fix (Altair) ----
+    # 1) TitleParams with offset to push the title down
+    # 2) Extra top padding so the title never clips in Snowflake Streamlit
+    def fixed_title(text: str) -> alt.TitleParams:
+        return alt.TitleParams(
+            text=text,
+            fontSize=16,
+            fontWeight='bold',
+            anchor='start',
+            offset=14  # key: moves the title downward
+        )
+
+    PAD = {"top": 28, "left": 6, "right": 6, "bottom": 6}  # key: explicit headroom
+
+    charts_fixed = []
     if charts:
+        for item in charts:
+            try:
+                t, ch = item
+            except Exception:
+                t, ch = "", item
+            ch = ch.properties(title=fixed_title(t or ""), padding=PAD)
+            ch = ch.configure_title(anchor='start')
+            charts_fixed.append((t, ch))
+    
+    if charts_fixed:
         st.subheader("📈 Performance Visualizations")
         
-        # Display charts in a 2-column grid, ensuring all 6 charts are shown
-        num_charts = len(charts)
+        # Display charts in a 2-column grid (unchanged layout)
+        num_charts = len(charts_fixed)
         for i in range(0, num_charts, 2):
             cols = st.columns(2)
             
             # Left column chart
             if i < num_charts:
-                chart_title, chart = charts[i]
+                _, chart = charts_fixed[i]
                 with cols[0]:
                     st.altair_chart(chart, use_container_width=True)
             
             # Right column chart
             if i + 1 < num_charts:
-                chart_title, chart = charts[i + 1]
+                _, chart = charts_fixed[i + 1]
                 with cols[1]:
                     st.altair_chart(chart, use_container_width=True)
         
-        # Display chart count for debugging
         st.caption(f"Displaying {num_charts} performance charts")
     else:
         st.info("No suitable data found for creating visualizations.")
     
-    # Enhanced Summary statistics table
+    # ─────────────────────────────────────────────────────
+    # 📈 Summary Statistics (unchanged)
+    # ─────────────────────────────────────────────────────
     st.subheader("📈 Summary Statistics")
     if numeric_candidates:
-        # Create enhanced summary statistics
         summary_stats = data[numeric_candidates].describe()
-        
-        # Transpose for better readability and add formatting
         summary_df = summary_stats.T.round(3)
-        
-        # Add meaningful column names and formatting
         summary_df.columns = ['Count', 'Mean', 'Std Dev', 'Min', '25%', '50% (Median)', '75%', 'Max']
         
-        # Format specific columns for better readability
         format_dict = {}
         for col in summary_df.index:
             if 'cost' in col.lower():
@@ -676,7 +698,6 @@ with tabs[0]:
             else:
                 format_dict[col] = "{:.2f}"
         
-        # Create three columns for better organization
         col1, col2 = st.columns(2)
         
         with col1:
@@ -686,14 +707,11 @@ with tabs[0]:
             
             if key_metrics_present:
                 key_stats_df = summary_df.loc[key_metrics_present]
-                
-                # Create a more readable format
                 for metric in key_stats_df.index:
                     mean_val = key_stats_df.loc[metric, 'Mean']
                     min_val = key_stats_df.loc[metric, 'Min']
                     max_val = key_stats_df.loc[metric, 'Max']
                     
-                    # Format based on metric type
                     if 'cost' in metric.lower():
                         st.metric(
                             label=metric.replace('_', ' ').title(),
@@ -721,15 +739,12 @@ with tabs[0]:
         
         with col2:
             st.markdown("**📊 Distribution Insights**")
-            
-            # Calculate and display key insights
             insights = []
             
             if 'failure_rate' in summary_df.index:
                 fr_mean = summary_df.loc['failure_rate', 'Mean']
                 fr_std = summary_df.loc['failure_rate', 'Std Dev']
                 insights.append(f"• **Failure Rate Variability**: {fr_std:.3f} (σ)")
-                
                 if fr_mean > 0.5:
                     insights.append(f"• **High failure rate detected** (>{fr_mean:.1%})")
                 else:
@@ -738,8 +753,7 @@ with tabs[0]:
             if 'maintenance_cost' in summary_df.index:
                 mc_q75 = summary_df.loc['maintenance_cost', '75%']
                 mc_q25 = summary_df.loc['maintenance_cost', '25%']
-                iqr = mc_q75 - mc_q25
-                insights.append(f"• **Cost IQR**: ${iqr:,.0f}")
+                insights.append(f"• **Cost IQR**: ${mc_q75 - mc_q25:,.0f}")
             
             if 'downtime_hours' in summary_df.index:
                 dt_median = summary_df.loc['downtime_hours', '50% (Median)']
@@ -755,7 +769,6 @@ with tabs[0]:
             for insight in insights:
                 st.markdown(insight)
         
-        # Full detailed table (collapsible)
         with st.expander("📋 Detailed Statistics Table", expanded=False):
             st.dataframe(
                 summary_df.style.format({
@@ -770,6 +783,7 @@ with tabs[0]:
                 }),
                 use_container_width=True
             )
+
 
 # AI Insights tab
 with tabs[1]:
